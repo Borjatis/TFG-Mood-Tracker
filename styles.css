@@ -1,0 +1,184 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: background-color 3s ease; /* Transición suave para el fondo */
+  text-align: center;
+}
+
+/* Fondos y Tipografía de cada estado de ánimo */
+body.feliz {
+  background-color: #FFD700; /* Amarillo brillante */
+  font-family: "Comic Sans MS", cursive, sans-serif; /* Un estilo juguetón */
+  font-weight: bold;
+}
+
+body.triste {
+  background-color: #808080; /* Gris */
+  font-family: "Times New Roman", serif; /* Clásico y sobrio */
+  font-weight: normal;
+  letter-spacing: 1px;
+}
+
+body.ansioso {
+  background-color: #FF6347; /* Naranja */
+  font-family: "Courier New", monospace; /* Rígido y nervioso */
+  font-weight: bold;
+  letter-spacing: -1px;
+}
+
+body.relajado {
+  background-color: #98FB98; /* Verde claro */
+  font-family: "Pacifico", cursive; /* Suave y fluido */
+  font-weight: lighter;
+  letter-spacing: 2px;
+}
+
+.container {
+  margin-top: 50px;
+}
+
+select, button {
+  font-size: 1.2rem;
+  padding: 10px;
+  margin: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease; /* Animación suave al hacer hover en los botones */
+}
+
+/* Botón hover */
+button:hover {
+  background-color: #45a049;
+  transform: scale(1.1); /* Agranda el botón al hacer hover */
+}
+
+/* Estilo para los comentarios */
+em {
+  color: #555;
+  font-style: italic;
+  font-size: 0.9rem;
+  display: block;
+  margin-top: 5px;
+}
+
+/* Historial de estados de ánimo con scroll */
+#mood-history {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Estilos para los estados de ánimo en el historial */
+.mood-happy {
+  color: #FFD700; /* Amarillo */
+}
+
+.mood-sad {
+  color: #808080; /* Gris */
+}
+
+.mood-anxious {
+  color: #FF6347; /* Rojo-Naranja */
+}
+
+.mood-relaxed {
+  color: #98FB98; /* Verde claro */
+}
+
+
+/* Animación para las advertencias */
+p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  opacity: 0; /* Inicialmente oculto */
+  animation: fadeIn 3s forwards; /* Animación de aparición más lenta */
+}
+
+/* Definir la animación fadeIn */
+@keyframes fadeIn {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+
+/* Definir la animación para que las advertencias se muestren una tras otra */
+#warning {
+  animation-delay: 0s;
+}
+
+#warning2 {
+  animation-delay: 0.5s; /* Reducir el tiempo de aparición */
+}
+
+#warning3 {
+  animation-delay: 1s; /* Reducir el tiempo de aparición */
+}
+
+#particles-js {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1; /* Para que quede detrás del contenido */
+}
+
+/* Estilos para la sección de configuración */
+.config-container {
+  margin-top: 30px;
+  padding: 20px;
+  text-align: center;
+}
+
+.config-container label {
+  display: inline-block;
+  font-size: 1.1rem;
+  margin: 5px 15px;
+  cursor: pointer;
+}
+
+.config-container input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+#volume-slider {
+  width: 200px;
+  margin: 10px;
+}
+
+#volume-level {
+  font-size: 1rem;
+  font-weight: normal;
+  margin-left: 10px;
+}
+
+/* Estilos para el contenedor del gráfico */
+.chart-container {
+  width: 90%; /* Mayor ancho para aprovechar más el espacio */
+  max-width: 700px; /* Limita el tamaño para que no sea demasiado grande en pantallas grandes */
+  margin: 20px auto;
+  text-align: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1); /* Fondo semitransparente */
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+}
+
+/* Hace que el gráfico no se desborde en pantallas pequeñas */
+canvas {
+  max-width: 100%;
+  height: auto !important; /* Mantiene la proporción */
+}
+
+  
+  
