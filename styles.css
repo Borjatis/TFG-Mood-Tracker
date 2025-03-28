@@ -6,11 +6,14 @@ body {
   text-align: center;
 }
 
+.title {
+  margin-bottom: 100px; /* Ajusta el espacio entre divs */
+}
+
 /* Fondos y Tipografía de cada estado de ánimo */
 body.feliz {
   background-color: #FFD700; /* Amarillo brillante */
   font-family: "Comic Sans MS", cursive, sans-serif; /* Un estilo juguetón */
-  font-weight: bold;
 }
 
 body.triste {
@@ -23,7 +26,6 @@ body.triste {
 body.ansioso {
   background-color: #FF6347; /* Naranja */
   font-family: "Courier New", monospace; /* Rígido y nervioso */
-  font-weight: bold;
   letter-spacing: -1px;
 }
 
