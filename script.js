@@ -1,4 +1,5 @@
 let attempts = 0; // Contador para realizar el seguimiento de los intentos
+let mood = null; // Estado de ánimo
 
 // Sonidos para cada estado de ánimo
 const happySound = new Audio('sounds/happy.mp3');
@@ -49,6 +50,7 @@ const moodIcons = {
     "relajado": "😌"
 };
 
+//HISTORIAL
 // Función para guardar el estado de ánimo y comentario en el historial
 function saveMoodToHistory(mood) {
     let history = JSON.parse(localStorage.getItem("moodHistory")) || [];
@@ -126,19 +128,26 @@ let isParticlesEnabled = true; // Variable para controlar el fondo animado
 document.addEventListener('DOMContentLoaded', function () {
     // Control de sonido
     const soundToggle = document.getElementById('sound-toggle');
-    if (soundToggle) {
-        soundToggle.addEventListener('change', function () {
-            isSoundEnabled = this.checked;
-        });
-    }
+    soundToggle.addEventListener("change", function () {
+        const isChecked = this.checked;
+        isSoundEnabled = isChecked;
+        if (isChecked) {
+            // Reproduce el sonido correspondiente al estado actual
+            if (mood === "feliz") happySound.play();
+            else if (mood === "triste") sadSound.play();
+            else if (mood === "ansioso") anxiousSound.play();
+            else if (mood === "relajado") relaxedSound.play();
+        } else {
+            stopCurrentSound();
+        }
+    });
 
     // Control de fondo animado
     const particlesToggle = document.getElementById('background-toggle');
-    if (particlesToggle) {
-        particlesToggle.addEventListener('change', function () {
-            isParticlesEnabled = this.checked;
-        });
-    }
+    particlesToggle.addEventListener("change", function () {
+        isParticlesEnabled = this.checked;
+        aplicarFondoAnimado();
+    });
 
     //// CONTROL DEL VOLUMEN
     const volumeSlider = document.getElementById('volume-slider');
@@ -163,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.getElementById('mood-form').addEventListener('submit', function (event) {
     event.preventDefault(); // Evitar que se recargue la página al enviar el formulario
 
-    const mood = document.getElementById('mood').value;
+    mood = document.getElementById('mood').value;
     const warning = document.getElementById('warning');
     const warning2 = document.getElementById('warning2');
     const warning3 = document.getElementById('warning3');
@@ -215,68 +224,73 @@ document.getElementById('mood-form').addEventListener('submit', function (event)
         stopCurrentSound();
 
         // Aplicar la clase correspondiente según el estado seleccionado y reproducir el sonido adecuado
+        // Y cambio de efectos de partículas según el estado de ánimo
         if (mood === "feliz") {
             document.body.classList.add("feliz");
             if (isSoundEnabled) happySound.play();
             moodIcon.textContent = "😃";
+
+            config.particles.move.speed = 4; // Más rápido
         } else if (mood === "triste") {
             document.body.classList.add("triste");
             if (isSoundEnabled) sadSound.play();
             moodIcon.textContent = "😢";
+
+            config.particles.opacity.value = 0.3; // Más opaco
         } else if (mood === "ansioso") {
             document.body.classList.add("ansioso");
             if (isSoundEnabled) anxiousSound.play();
             moodIcon.textContent = "😰";
+
+            config.particles.move.speed = 5; // Movimiento más rápido
         } else if (mood === "relajado") {
             document.body.classList.add("relajado");
             if (isSoundEnabled) relaxedSound.play();
             moodIcon.textContent = "😌";
+
+            config.particles.move.speed = 1; // Movimiento más lento
         }
 
         // Deshabilitar la opción "Selecciona un estado"
         moodSelect.querySelector('option[value=""]').disabled = true;
     }
     
-    //// FONDO ANIMADO
-    // Configuración inicial de partículas
-    let config = {
-        particles: {
-            number: { value: 100 }, // Número de partículas
-            size: { value: 3 }, // Tamaño de partículas
-            move: { speed: 2 }, // Velocidad de movimiento
-            opacity: { value: 0.7 }, // Opacidad de partículas
-            line_linked: { enable: true }, // Desactivar líneas entre partículas
-            //color: { value: "#ffffff" }, // Color de partículas
-            //shape: { type: "circle", stroke: { width: 1, color: "#000000" } }, // Partículas circulares con borde negro
-        }
-    };
-
-    // Cambiar efectos de partículas según el estado de ánimo
-    if (mood === "feliz") {
-        config.particles.move.speed = 4; // Más rápido
-    } else if (mood === "triste") {
-        config.particles.opacity.value = 0.3; // Más opaco
-    } else if (mood === "ansioso") {
-        config.particles.move.speed = 5; // Movimiento más rápido
-    } else if (mood === "relajado") {
-        config.particles.move.speed = 1; // Movimiento más lento
-    }
-
-    // Activar o desactivar el fondo de partículas
-    if (isParticlesEnabled) {
-        // Activar partículas
-        particlesJS('particles-js', config);
-    } else {
-        // Desactivar las partículas
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 0 }, // No mostrar partículas
-            }
-        });
-    }
+    aplicarFondoAnimado();
 });
 
-// Configuración del gráfico
+// CONFIGURACIÓN PARTICULAS DEL FONDO ANIMADO
+// Configuración inicial de partículas
+let config = {
+    particles: {
+        number: { value: 100 }, // Número de partículas
+        size: { value: 3 }, // Tamaño de partículas
+        move: { speed: 2 }, // Velocidad de movimiento
+        opacity: { value: 0.7 }, // Opacidad de partículas
+        line_linked: { enable: true }, // Desactivar líneas entre partículas
+        //color: { value: "#ffffff" }, // Color de partículas
+        //shape: { type: "circle", stroke: { width: 1, color: "#000000" } }, // Partículas circulares con borde negro
+    }
+};
+
+// Activar o desactivar el fondo de partículas
+function aplicarFondoAnimado() {
+    const particlesContainer = document.getElementById("particles-js");
+
+    // Elimina el canvas anterior si existe (reinicia partículas)
+    if (window.pJSDom && window.pJSDom.length > 0) {
+        window.pJSDom[0].pJS.fn.vendors.destroypJS();
+        window.pJSDom = [];
+    }
+
+    if (isParticlesEnabled) {
+        particlesContainer.style.display = "block";
+        particlesJS('particles-js', config);
+    } else {
+        particlesContainer.style.display = "none";
+    }
+}
+
+// CONFIGURACIÓN DEL GRÁFICO
 // Cargar historial y actualizar gráfico
 document.addEventListener("DOMContentLoaded", function () {
     const ctx = document.getElementById('moodChart');
