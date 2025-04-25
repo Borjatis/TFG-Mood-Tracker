@@ -60,12 +60,21 @@ function saveMoodToHistory(mood) {
     const moodColor = mood === "feliz" ? "mood-happy" :
                       mood === "triste" ? "mood-sad" :
                       mood === "ansioso" ? "mood-anxious" : "mood-relaxed";
+    
+    // Nuevo campo para almacenar el mensaje de la IA
+    let iaMessage = "";
+
+    // Si hay un mensaje generado por la IA, guardarlo
+    if (mood) {
+        iaMessage = localStorage.getItem('iaMessage') || ""; // Obtener mensaje de IA del localStorage
+    }
 
     history.push({
         mood: mood,
         icon: moodIcon,
         colorClass: moodColor,
         comment: moodComment || "", // Guardar comentario si existe
+        iaMessage: iaMessage, // Guardar mensaje generado por la IA
         date: new Date().toLocaleString()
     });
 
@@ -223,33 +232,41 @@ document.getElementById('mood-form').addEventListener('submit', function (event)
         // Detener cualquier sonido anterior antes de reproducir uno nuevo
         stopCurrentSound();
 
-        // Aplicar la clase correspondiente según el estado seleccionado y reproducir el sonido adecuado
+        // Aplicar la clase correspondiente según el estado seleccionado, reproducir el sonido adecuado
         // Y cambio de efectos de partículas según el estado de ánimo
         if (mood === "feliz") {
             document.body.classList.add("feliz");
             if (isSoundEnabled) happySound.play();
             moodIcon.textContent = "😃";
 
-            config.particles.move.speed = 4; // Más rápido
+            config.particles.move.speed = 4;
+            generarMensajeIA("feliz");
+        
         } else if (mood === "triste") {
             document.body.classList.add("triste");
             if (isSoundEnabled) sadSound.play();
             moodIcon.textContent = "😢";
 
-            config.particles.opacity.value = 0.3; // Más opaco
+            config.particles.opacity.value = 0.3;
+            generarMensajeIA("triste");
+        
         } else if (mood === "ansioso") {
             document.body.classList.add("ansioso");
             if (isSoundEnabled) anxiousSound.play();
             moodIcon.textContent = "😰";
 
-            config.particles.move.speed = 5; // Movimiento más rápido
+            config.particles.move.speed = 5;
+            generarMensajeIA("ansioso");
+        
         } else if (mood === "relajado") {
             document.body.classList.add("relajado");
             if (isSoundEnabled) relaxedSound.play();
             moodIcon.textContent = "😌";
 
-            config.particles.move.speed = 1; // Movimiento más lento
+            config.particles.move.speed = 1;
+            generarMensajeIA("relajado");
         }
+        
 
         // Deshabilitar la opción "Selecciona un estado"
         moodSelect.querySelector('option[value=""]').disabled = true;
@@ -396,3 +413,33 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+//INTEGRACIÓN DE IA GENERATIVA
+ function generarMensajeIA(mood) {
+     fetch('http://localhost:3000/api/mood-response', {
+       method: 'POST',
+       headers: { 'Content-Type': 'application/json' },
+       body: JSON.stringify({ mood })
+     })
+     .then(res => res.json())
+     .then(data => {
+       // Guardar el mensaje de la IA en el localStorage
+       localStorage.setItem('iaMessage', data.message);
+
+       // Si quieres que lo lea en voz alta:
+       if ('speechSynthesis' in window) {
+         const utterance = new SpeechSynthesisUtterance(data.message);
+         utterance.lang = "es-ES";
+         speechSynthesis.speak(utterance);
+       }
+     })
+     .catch(err => {
+       console.error("Error al generar mensaje:", err);
+       // Almacenar un mensaje predeterminado en caso de error
+       localStorage.setItem('iaMessage', "No he podido generar un mensaje ahora mismo 😕");
+     });
+ }
+
+
+
+  
