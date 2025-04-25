@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mood Tracker</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="emoji.png" type="image/png">
 </head>
 <body>
     <div class="container">
         <div class="title">
             <h4>"Descubre tu estado de ánimo y mejora tu bienestar"</h4>
-            <p6>Registra tus emociones, observa patrones y deja que Mood Tracker adapte la experiencia a ti.<br>
+            <p2>Registra tus emociones, observa patrones y deja que Mood Tracker adapte la experiencia a ti.<br>
             Personaliza la interfaz, accede a tu historial emocional y recibe interacción adaptativa según cómo te sientas.<br>
             Porque entender cómo te sientes es el primer paso para sentirte mejor.<br>   
-            </p6>
+            </p2>
         </div>
 
         <h1>Selecciona tu estado de ánimo <span id="mood-icon">🙂</span></h1>
@@ -35,9 +36,10 @@
         </form>
         
         <!-- Mensajes de advertencia -->
-        <p id="warning" style="display:none;">¡Vamos, selecciona un estado! 😅</p>
-        <p id="warning2" style="display:none;">Es por tu bien, ¿acaso no quieres una interfaz de usuario personalizada a tu estado de ánimo? 😁</p>
-        <p id="warning3" style="display:none;">Como quieras aburrido, te dejo este por defecto 😛</p>
+        <p id="warning" class="ocultar">¡Vamos, selecciona un estado! 😅</p>
+        <p id="warning2" class="ocultar">Es por tu bien, ¿acaso no quieres una interfaz de usuario personalizada a tu estado de ánimo? 😁</p>
+        <p id="warning3" class="ocultar">Como quieras aburrido, te dejo este por defecto 😛</p>
+
 
         <!-- Sección de configuración -->
         <div class="config-container">
@@ -45,7 +47,7 @@
             
             <!-- Control de sonido -->
             <div>               
-                <label for="sound-toggle">Activar sonido</label>
+                <label for="sound-toggle">Activar sonido de fondo</label>
                 <input type="checkbox" id="sound-toggle" checked>
             </div>
         
@@ -78,8 +80,8 @@
     </div>
 
     <div id="particles-js"></div>
+    <script src="libs/particles.min.js"></script>
+    <script src="libs/chart.js"></script>
     <script src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>

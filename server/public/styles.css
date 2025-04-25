@@ -153,6 +153,10 @@ p {
   margin-right: 10px;
 }
 
+.ocultar {
+  display: none;
+}
+
 #volume-slider {
   width: 200px;
   margin: 10px;
@@ -182,5 +186,5 @@ canvas {
   height: auto !important; /* Mantiene la proporción */
 }
 
-  
+
   
