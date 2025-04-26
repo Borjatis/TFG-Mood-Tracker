@@ -415,6 +415,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 //INTEGRACIÓN DE IA GENERATIVA
+// Modificar la función de IA para guardar el mensaje sin mostrarlo en la interfaz
  function generarMensajeIA(mood) {
      fetch('http://localhost:3000/api/mood-response', {
        method: 'POST',
@@ -439,6 +440,84 @@ document.addEventListener("DOMContentLoaded", function () {
        localStorage.setItem('iaMessage', "No he podido generar un mensaje ahora mismo 😕");
      });
  }
+
+// Modificar la función de IA para que acepte un valor manual desde la consola para pruebas
+// function generarMensajeIA(mood) {
+//     console.log(`Estado de ánimo recibido: ${mood}`);
+    
+//     // Aquí se simula la respuesta de la IA
+//     let simulatedMessage = "";
+
+//     switch (mood) {
+//         case "feliz":
+//             simulatedMessage = "¡Qué bueno verte feliz! 😊";
+//             break;
+//         case "triste":
+//             simulatedMessage = "Venga, todo mejorará. 😌";
+//             break;
+//         case "ansioso":
+//             simulatedMessage = "Respira profundo, todo va a estar bien. 🌿";
+//             break;
+//         case "relajado":
+//             simulatedMessage = "Qué bueno que te sientas relajado. 🌊";
+//             break;
+//         default:
+//             simulatedMessage = "¡No te preocupes, todo está bien! 😄";
+//             break;
+//     }
+
+//     // Guardar el mensaje simulado en el localStorage
+//     localStorage.setItem('iaMessage', simulatedMessage);
+
+//     // Mostrar el mensaje en el HTML
+//     const mensajeElemento = document.getElementById('mensajeIATexto');
+//     const mensajeContenedor = document.getElementById('mensajeIA');
+
+//     // Cambiar el texto del elemento y agregar la clase 'visible' para animarlo
+//     mensajeElemento.innerHTML = simulatedMessage;
+//     mensajeContenedor.classList.add('visible'); // Añadir la clase 'visible' para activar la animación
+
+//     // Aquí también puedes probar que el mensaje se lea en voz alta
+//     if ('speechSynthesis' in window) {
+//         const utterance = new SpeechSynthesisUtterance(simulatedMessage);
+//         utterance.lang = "es-ES";
+//         speechSynthesis.speak(utterance);
+//     }
+
+//     // Imprimir el mensaje simulado en consola
+//     console.log("Mensaje generado por la IA: ", simulatedMessage);
+// }
+
+
+//ANTIGUA, GENERABA AUDIO DE ERROR!
+// function generarMensajeIA(mood) {
+//     fetch('http://localhost:3000/api/mood-response', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({ mood })
+//     })
+//     .then(res => res.json())
+//     .then(data => {
+//       const contenedor = document.getElementById("mensajeIA");
+//       const texto = document.getElementById("mensajeIATexto");
+  
+//       texto.textContent = data.message;
+//       contenedor.classList.remove("oculto"); // Lo hace visible si estaba oculto
+  
+//       // Si quieres que lo lea en voz alta:
+//       if ('speechSynthesis' in window) {
+//         const utterance = new SpeechSynthesisUtterance(data.mensaje);
+//         utterance.lang = "es-ES";
+//         speechSynthesis.speak(utterance);
+//       }
+//     })
+//     .catch(err => {
+//       console.error("Error al generar mensaje:", err);
+//       const texto = document.getElementById("mensajeIATexto");
+//       texto.textContent = "No he podido generar un mensaje ahora mismo 😕";
+//       document.getElementById("mensajeIA").classList.remove("oculto");
+//     });
+// }
 
 
 
