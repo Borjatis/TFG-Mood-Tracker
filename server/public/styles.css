@@ -6,38 +6,103 @@ body {
   text-align: center;
 }
 
-.title {
-  margin-bottom: 100px; /* Ajusta el espacio entre divs */
+header {
+  width: 100%;
+  height: 150px;
+  background-image: url('./fondoAlargado.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+ 
+}
+
+header h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+header .subtitle {
+  font-size: 1.2rem;
+  text-align: right;
+  max-width: 50%;
+  padding-left: 150px; 
+}
+
+.hero {
+  padding: 10px 20px;
+  text-align: center;
+}
+
+.hero-text h2 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.hero-text p {
+  font-size: 0.9rem;
+  color: #555;
 }
 
 /* Fondos y Tipografía de cada estado de ánimo */
-body.feliz {
-  background-color: #FFD700; /* Amarillo brillante */
-  font-family: "Comic Sans MS", cursive, sans-serif; /* Un estilo juguetón */
-}
+/* body.feliz {
+  background-color: #FFD700; /* Amarillo brillante *//*
+  font-family: "Comic Sans MS", cursive, sans-serif; /* Un estilo juguetón *//*
+} */
 
-body.triste {
-  background-color: #808080; /* Gris */
-  font-family: "Times New Roman", serif; /* Clásico y sobrio */
+/* body.triste {
+  background-color: #808080; /* Gris *//*
+  font-family: "Times New Roman", serif; /* Clásico y sobrio *//*
   font-weight: normal;
   letter-spacing: 1px;
-}
+} */
 
-body.ansioso {
-  background-color: #FF6347; /* Naranja */
-  font-family: "Courier New", monospace; /* Rígido y nervioso */
+/* body.ansioso {
+  background-color: #FF6347; /* Naranja *//*
+  font-family: "Courier New", monospace; /* Rígido y nervioso *//*
   letter-spacing: -1px;
-}
+} */
 
-body.relajado {
-  background-color: #98FB98; /* Verde claro */
-  font-family: "Pacifico", cursive; /* Suave y fluido */
+/* body.relajado {
+  background-color: #98FB98; /* Verde claro *//*
+  font-family: "Pacifico", cursive; /* Suave y fluido *//*
   font-weight: lighter;
   letter-spacing: 2px;
+} */
+
+/* Columnas */
+.columns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  margin: 50px 0;
 }
 
-.container {
-  margin-top: 50px;
+/* Selección de estado y comentario */
+#mood-form {
+  background: rgba(255,255,255,0.8);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* MIRA SI TIENES QUE METER ESTO ABAJO
+  margin: 20px 0;
+} */
+
+#mood-comment {
+  width: 80%;
+  height: 80px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  resize: none;
 }
 
 select, button {
@@ -54,16 +119,106 @@ button:hover {
   transform: scale(1.1); /* Agranda el botón al hacer hover */
 }
 
+/* Animación para las advertencias */
+.warnings p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  margin: 10px 0;
+  opacity: 0; /* Inicialmente oculto */
+  animation: fadeIn 3s forwards; /* Animación de aparición más lenta */
+}
+
+/* Definir la animación para que las advertencias se muestren una tras otra */
+#warning {
+  animation-delay: 0s;
+}
+
+#warning2 {
+  animation-delay: 0.5s; /* Reducir el tiempo de aparición */
+}
+
+#warning3 {
+  animation-delay: 1s; /* Reducir el tiempo de aparición */
+}
+
+.ocultar {
+  display: none;
+}
+
 /* Estilo para los comentarios */
-em {
+/* em {
   color: #555;
   font-style: italic;
   font-size: 0.9rem;
   display: block;
   margin-top: 5px;
+} */
+
+/* Zona inferior de tres columnas */
+.section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+  margin-top: 50px;
 }
 
-/* Historial de estados de ánimo con scroll */
+/* Estilos para la Primera columna de configuración */
+.config-container {
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+}
+
+/* Estilos para la sección de configuración */
+/* .config-container {
+  margin-top: 30px;
+  padding: 20px;
+  text-align: center;
+}
+
+.config-container label {
+  display: inline-block;
+  font-size: 1.1rem;
+  margin: 5px 15px;
+  cursor: pointer;
+}
+
+.config-container input[type="checkbox"] {
+  margin-right: 10px;
+} */
+
+#volume-slider {
+  width: 200px;
+  margin: 10px;
+}
+
+#volume-level {
+  font-size: 1rem;
+  font-weight: normal;
+  margin-left: 10px;
+}
+
+
+/* Segunda columna
+.history-container {
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+} */
+
+/* Estilos para el historial de estados de ánimo con scroll de la Segunda columna */
 #mood-history {
   max-width: 400px;
   margin: 20px auto;
@@ -93,82 +248,70 @@ em {
 }
 
 
-/* Animación para las advertencias */
-p {
-  font-size: 1.2rem;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 10px;
-  opacity: 0; /* Inicialmente oculto */
-  animation: fadeIn 3s forwards; /* Animación de aparición más lenta */
-}
 
-/* Definir la animación fadeIn */
-@keyframes fadeIn {
-  0% {
-      opacity: 0;
-  }
-  100% {
-      opacity: 1;
-  }
-}
-
-/* Definir la animación para que las advertencias se muestren una tras otra */
-#warning {
-  animation-delay: 0s;
-}
-
-#warning2 {
-  animation-delay: 0.5s; /* Reducir el tiempo de aparición */
-}
-
-#warning3 {
-  animation-delay: 1s; /* Reducir el tiempo de aparición */
-}
-
-#particles-js {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: -1; /* Para que quede detrás del contenido */
-}
-
-/* Estilos para la sección de configuración */
-.config-container {
-  margin-top: 30px;
+/* Estilos de la Tercera columna correspondiente a los mensajes IA adaptativa*/
+.ia-message-container {
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
   padding: 20px;
-  text-align: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
 }
 
-.config-container label {
-  display: inline-block;
+.mensaje-ia {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  min-height: 100px;
+}
+
+/* Mensaje IA adaptativa */
+/* .mensaje-ia {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 16px 24px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  color: #fff;
   font-size: 1.1rem;
-  margin: 5px 15px;
-  cursor: pointer;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.5s ease;
+} */
+
+.mensaje-ia.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.config-container input[type="checkbox"] {
-  margin-right: 10px;
+.mensaje-ia p {
+  margin: 0;
+  line-height: 1.4;
 }
 
-.ocultar {
-  display: none;
+
+/* Estilos para el contenedor del gráfico de debajo*/
+.chart-section {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
 }
 
-#volume-slider {
-  width: 200px;
-  margin: 10px;
-}
+/* .chart-container {
+  width: 90%;
+  max-width: 800px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+} */
 
-#volume-level {
-  font-size: 1rem;
-  font-weight: normal;
-  margin-left: 10px;
-}
-
-/* Estilos para el contenedor del gráfico */
 .chart-container {
   width: 90%; /* Mayor ancho para aprovechar más el espacio */
   max-width: 700px; /* Limita el tamaño para que no sea demasiado grande en pantallas grandes */
@@ -186,31 +329,37 @@ canvas {
   height: auto !important; /* Mantiene la proporción */
 }
 
-/* Mensaje IA adaptativa */
-.mensaje-ia {
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 16px 24px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 16px;
-  color: #fff;
-  font-size: 1.1rem;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.5s ease;
+
+/* Estilos de las particulas del fondo animado */
+#particles-js {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1; /* Para que quede detrás del contenido */
 }
 
-.mensaje-ia.visible {
-  opacity: 1;
-  transform: translateY(0);
+
+/* Pequeños ajustes responsivos */
+@media (max-width: 900px) {
+  .bottom-section {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
-.mensaje-ia p {
-  margin: 0;
-  line-height: 1.4;
+/* Definir la animación fadeIn */
+@keyframes fadeIn {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
 }
+
+
+
 
   

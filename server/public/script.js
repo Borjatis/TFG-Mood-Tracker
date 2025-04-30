@@ -442,27 +442,27 @@ document.addEventListener("DOMContentLoaded", function () {
  }
 
 // Modificar la función de IA para que acepte un valor manual desde la consola para pruebas
-// function generarMensajeIA(mood) {
-//     console.log(`Estado de ánimo recibido: ${mood}`);
+// function generarmensajeia(mood) {
+//     console.log(`estado de ánimo recibido: ${mood}`);
     
-//     // Aquí se simula la respuesta de la IA
-//     let simulatedMessage = "";
+//     // aquí se simula la respuesta de la ia
+//     let simulatedmessage = "";
 
 //     switch (mood) {
 //         case "feliz":
-//             simulatedMessage = "¡Qué bueno verte feliz! 😊";
+//             simulatedmessage = "¡qué bueno verte feliz! 😊";
 //             break;
 //         case "triste":
-//             simulatedMessage = "Venga, todo mejorará. 😌";
+//             simulatedmessage = "venga, todo mejorará. 😌";
 //             break;
 //         case "ansioso":
-//             simulatedMessage = "Respira profundo, todo va a estar bien. 🌿";
+//             simulatedmessage = "respira profundo, todo va a estar bien. 🌿";
 //             break;
 //         case "relajado":
-//             simulatedMessage = "Qué bueno que te sientas relajado. 🌊";
+//             simulatedmessage = "qué bueno que te sientas relajado. 🌊";
 //             break;
 //         default:
-//             simulatedMessage = "¡No te preocupes, todo está bien! 😄";
+//             simulatedmessage = "¡no te preocupes, todo está bien! 😄";
 //             break;
 //     }
 
