@@ -8,17 +8,13 @@ body {
 
 header {
   width: 100%;
-  height: 150px;
-  background-image: url('./fondoAlargado.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  height: 100px;
+  background: rgb(255, 255, 255);
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
- 
+  color: rgb(0, 0, 0);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.355);
 }
 
 header h1 {
@@ -33,46 +29,56 @@ header .subtitle {
   padding-left: 150px; 
 }
 
+main {
+  border-block: 3px solid rgb(0, 0, 0); 
+  background-image: url('./fondoAlargado.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 .hero {
-  padding: 10px 20px;
+  padding: 50px;
   text-align: center;
 }
 
 .hero-text h2 {
-  font-size: 1.1rem;
-  margin-bottom: 10px;
+  font-size: 1.2rem;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.642);
 }
 
 .hero-text p {
-  font-size: 0.9rem;
-  color: #555;
+  font-size: 1rem;
+  color: #ffffffe1;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.475);
 }
 
 /* Fondos y Tipografía de cada estado de ánimo */
-/* body.feliz {
-  background-color: #FFD700; /* Amarillo brillante *//*
-  font-family: "Comic Sans MS", cursive, sans-serif; /* Un estilo juguetón *//*
-} */
+body.feliz {
+  background-color: #ffd700; 
+  font-family: "comic sans ms", cursive, sans-serif; /* Estilo cómico */
+}
 
-/* body.triste {
-  background-color: #808080; /* Gris *//*
-  font-family: "Times New Roman", serif; /* Clásico y sobrio *//*
+body.triste {
+  background-color: #808080; 
+  font-family: "Times New Roman", serif; /* Clásico y sobrio */
   font-weight: normal;
   letter-spacing: 1px;
-} */
+}
 
-/* body.ansioso {
-  background-color: #FF6347; /* Naranja *//*
-  font-family: "Courier New", monospace; /* Rígido y nervioso *//*
+body.ansioso {
+  background-color: #FF6347; 
+  font-family: "Courier New", monospace; /* Rígido y nervioso */
   letter-spacing: -1px;
-} */
+} 
 
-/* body.relajado {
-  background-color: #98FB98; /* Verde claro *//*
-  font-family: "Pacifico", cursive; /* Suave y fluido *//*
+body.relajado {
+  background-color: #98FB98;
+  font-family: "Pacifico", cursive; /* Suave y fluido */
   font-weight: lighter;
   letter-spacing: 2px;
-} */
+}
 
 /* Columnas */
 .columns {
@@ -80,7 +86,6 @@ header .subtitle {
   flex-wrap: wrap;
   justify-content: center;
   gap: 30px;
-  margin: 50px 0;
 }
 
 /* Selección de estado y comentario */
@@ -89,28 +94,30 @@ header .subtitle {
   border-radius: 12px;
   padding: 20px;
   margin-top: 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin-bottom: 80px;
+  border: 1px solid #060606;
+  box-shadow: 0 4px 10px rgb(0, 0, 0);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.355);
 }
 
-/* MIRA SI TIENES QUE METER ESTO ABAJO
-  margin: 20px 0;
-} */
-
 #mood-comment {
+  font-size: 1.1rem;
   width: 80%;
-  height: 80px;
+  height: 50px;
   padding: 10px;
   border-radius: 10px;
-  border: 1px solid #ccc;
+  border: 1.5px solid #060606;
   resize: none;
 }
 
 select, button {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   padding: 10px;
   margin: 10px;
   cursor: pointer;
   transition: transform 0.2s ease; /* Animación suave al hacer hover en los botones */
+  border-radius: 5px;
+  border: 1.5px solid #060606;
 }
 
 /* Botón hover */
@@ -147,6 +154,16 @@ button:hover {
   display: none;
 }
 
+/* Definir la animación fadeIn */
+@keyframes fadeIn {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+
 /* Estilo para los comentarios */
 /* em {
   color: #555;
@@ -156,18 +173,41 @@ button:hover {
   margin-top: 5px;
 } */
 
-/* Zona inferior de tres columnas */
-.section {
+/* Zona inferior de dos bloques */
+.block {
   display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 30px;
+  padding: 40px;
+  flex-wrap: wrap; /* Para que en pantallas pequeñas se acomode vertical */
+}
+
+.first-block {
+  display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
   gap: 30px;
-  margin-top: 50px;
+  width: 55%;
+  margin-block: 50px;
+  padding: 60px;
+  border-radius: 10px;
+  border: 2px solid #060606;
+  backdrop-filter: blur(5px);
 }
 
-/* Estilos para la Primera columna de configuración */
+.top {
+  display: flex;
+  flex-wrap: wrap; /* Para que en pantallas pequeñas se acomode vertical */
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* Estilos para la Primera sección de configuración */
 .config-container {
+  font-size: 1.2rem;
   flex: 1;
   min-width: 250px;
   max-width: 300px;
@@ -175,25 +215,16 @@ button:hover {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   backdrop-filter: blur(10px);
-}
-
-/* Estilos para la sección de configuración */
-/* .config-container {
-  margin-top: 30px;
-  padding: 20px;
-  text-align: center;
-}
-
-.config-container label {
-  display: inline-block;
-  font-size: 1.1rem;
-  margin: 5px 15px;
-  cursor: pointer;
+  margin-right: 5%;
+  margin-bottom: 20%;
+  border: 2px solid #060606;
 }
 
 .config-container input[type="checkbox"] {
-  margin-right: 10px;
-} */
+  transform: scale(1.5); 
+  margin-left: 10px;     
+  cursor: pointer;       
+} 
 
 #volume-slider {
   width: 200px;
@@ -202,24 +233,21 @@ button:hover {
 
 #volume-level {
   font-size: 1rem;
-  font-weight: normal;
+  font-weight: 600;
   margin-left: 10px;
 }
 
 
-/* Segunda columna
+/* Estilos para el historial de estados de ánimo con scroll de la Segunda sección */
 .history-container {
   flex: 1;
   min-width: 250px;
-  max-width: 300px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  backdrop-filter: blur(10px);
-} */
+  max-width: 500px;
+  margin-top: -30px;
+}
 
-/* Estilos para el historial de estados de ánimo con scroll de la Segunda columna */
 #mood-history {
+  font-size: 1.4rem;
   max-width: 400px;
   margin: 20px auto;
   padding: 10px;
@@ -248,79 +276,14 @@ button:hover {
 }
 
 
-
-/* Estilos de la Tercera columna correspondiente a los mensajes IA adaptativa*/
-.ia-message-container {
-  flex: 1;
-  min-width: 250px;
-  max-width: 300px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  backdrop-filter: blur(10px);
-}
-
-.mensaje-ia {
-  margin-top: 20px;
-  padding: 15px;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
-  min-height: 100px;
-}
-
-/* Mensaje IA adaptativa */
-/* .mensaje-ia {
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 16px 24px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 16px;
-  color: #fff;
-  font-size: 1.1rem;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.5s ease;
-} */
-
-.mensaje-ia.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.mensaje-ia p {
-  margin: 0;
-  line-height: 1.4;
-}
-
-
 /* Estilos para el contenedor del gráfico de debajo*/
-.chart-section {
-  margin-top: 40px;
-  display: flex;
-  justify-content: center;
-}
-
-/* .chart-container {
-  width: 90%;
-  max-width: 800px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  backdrop-filter: blur(10px);
-} */
-
 .chart-container {
-  width: 90%; /* Mayor ancho para aprovechar más el espacio */
-  max-width: 700px; /* Limita el tamaño para que no sea demasiado grande en pantallas grandes */
-  margin: 20px auto;
-  text-align: center;
+  width: 100%; /* Mayor ancho para aprovechar más el espacio */
   padding: 10px;
   background: rgba(255, 255, 255, 0.1); /* Fondo semitransparente */
   border-radius: 10px; /* Bordes redondeados */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+  border: 1px solid #060606;
 }
 
 /* Hace que el gráfico no se desborde en pantallas pequeñas */
@@ -329,6 +292,20 @@ canvas {
   height: auto !important; /* Mantiene la proporción */
 }
 
+
+/* Estilos para el segundo bloque correspondiente a los mensajes IA adaptativa*/
+.ia-message-container {
+  width: 31%;
+  height: 600px;
+  padding: 20px;
+  margin-top: 50px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  border: 2px solid #060606;
+  display: flex;
+  flex-direction: column;
+}
 
 /* Estilos de las particulas del fondo animado */
 #particles-js {
@@ -342,22 +319,12 @@ canvas {
 
 
 /* Pequeños ajustes responsivos */
-@media (max-width: 900px) {
+/* @media (max-width: 900px) {
   .bottom-section {
     flex-direction: column;
     align-items: center;
   }
-}
-
-/* Definir la animación fadeIn */
-@keyframes fadeIn {
-  0% {
-      opacity: 0;
-  }
-  100% {
-      opacity: 1;
-  }
-}
+} */
 
 
 

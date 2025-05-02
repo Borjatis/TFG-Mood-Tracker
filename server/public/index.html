@@ -15,20 +15,20 @@
         <p class="subtitle">Descubre tu estado de ánimo y mejora tu bienestar</p>
     </header>
 
-    <section class="hero">
-        <div class="container hero-text">            
-            <h2>"Tu bienestar emocional en un solo lugar"</h2>
-            <p>Registra tus emociones, observa patrones y deja que se adapte la experiencia a ti.<br>
-            Personaliza la interfaz, accede a tu historial emocional y recibe interacción adaptativa según cómo te sientas.<br>
-            Porque entender cómo te sientes es el primer paso para sentirte mejor.<br>
-            </p>           
-        </div>
-    </section>
-
     <main>
-        <div class="container columns">
-            <h2>Selecciona tu estado de ánimo <span id="mood-icon">🙂</span></h2>
+        <section class="hero">
+            <div class="hero-text">            
+                <h2>"Tu bienestar emocional en un solo lugar"</h2>
+                <p>Registra tus emociones, observa patrones y deja que se adapte la experiencia a ti.<br>
+                Personaliza la interfaz, accede a tu historial emocional y recibe interacción adaptativa según cómo te sientas.<br>
+                Porque entender cómo te sientes es el primer paso para sentirte mejor.<br>
+                </p>           
+            </div>
+        </section>
+
+        <div class="columns">            
             <form id="mood-form">
+                <h2>Selecciona tu estado de ánimo <span id="mood-icon">🙂</span></h2>
                 <select id="mood" name="mood">
                     <option value="">Selecciona un estado</option>
                     <option value="feliz">Feliz</option>
@@ -40,65 +40,64 @@
                 <!-- Campo para comentarios -->
                 <textarea id="mood-comment" placeholder="Escribe tu comentario (opcional)" rows="4"></textarea>
                 <button type="submit">Aplicar</button>
-            </form>
 
-            <!-- Mensajes de advertencia -->
-            <div class="warnings">
-                <p id="warning" class="ocultar">¡Vamos, selecciona un estado! 😅</p>
-                <p id="warning2" class="ocultar">Es por tu bien, ¿acaso no quieres una interfaz de usuario personalizada a tu estado de ánimo? 😁</p>
-                <p id="warning3" class="ocultar">Como quieras aburrido, te dejo este por defecto 😛</p>
-            </div>
+                <!-- Mensajes de advertencia -->
+                <div class="warnings">
+                    <p id="warning" class="ocultar">¡Vamos, selecciona un estado! 😅</p>
+                    <p id="warning2" class="ocultar">Es por tu bien, ¿acaso no quieres una interfaz <br> de usuario personalizada a tu estado de ánimo? 😁</p>
+                    <p id="warning3" class="ocultar">Como quieras aburrido, te dejo este por defecto 😛</p>
+                </div>
+            </form>
         </div>
     </main>
 
-    <!-- Zona inferior organizada en tres columnas CAMBIAR CLASS: SECTION--> 
-    <div class="section">
+    <!-- Zona inferior organizada en dos bloques -->
+    <div class="block">
+        <div class="first-block">
+            <div class="top">
+                <!-- Primera sección de configuración -->
+                <div class="config-container">
+                    <h2>Configuración</h2>
 
-        <!-- Primera columna: Sección de configuración -->
-        <div class="config-container">
-            <h2>Configuración</h2>
+                    <!-- Control de sonido -->
+                    <div>
+                        <label for="sound-toggle">Activar sonido de fondo</label>
+                        <input type="checkbox" id="sound-toggle" checked>
+                    </div>
 
-            <!-- Control de sonido -->
-            <div>
-                <label for="sound-toggle">Activar sonido de fondo</label>
-                <input type="checkbox" id="sound-toggle" checked>
+                    <!-- Control de fondo animado -->
+                    <div><br>
+                        <label for="background-toggle">Activar fondo animado</label>
+                        <input type="checkbox" id="background-toggle" checked>
+                    </div>
+
+                    <!-- Control de volumen -->
+                    <div><br>
+                        <label for="volume-slider">Volumen:</label>
+                        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
+                        <span id="volume-level">100%</span>
+                    </div>
+                </div>
+
+                <!-- Segunda sección el Historial -->
+                <div class="history-container">
+                    <h2>Historial de estados de ánimo</h2>
+                    <div id="mood-history"></div>
+                    <button id="clear-history">Limpiar Historial</button>
+                </div>
             </div>
-
-            <!-- Control de fondo animado -->
-            <div>
-                <label for="background-toggle">Activar fondo animado</label>
-                <input type="checkbox" id="background-toggle" checked>
-            </div>
-
-            <!-- Control de volumen -->
-            <div>
-                <label for="volume-slider">Volumen:</label>
-                <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
-                <span id="volume-level">100%</span>
+            <!-- Debajo de las dos secciones el Gráfico -->
+            <div class="chart-container">
+                <h2>Gráfico de estados de ánimo</h2>
+                <canvas id="moodChart"></canvas>
             </div>
         </div>
 
-        <!-- Segunda columna: Historial -->
-        <div class="history-container">
-            <h2>Historial de estados de ánimo</h2>
-            <div id="mood-history"></div>
-            <button id="clear-history">Limpiar Historial</button>
-        </div>
-
-        <!-- Tercera columna: Mensaje IA adaptativa -->
+        <!-- Segundo bloque: Mensaje IA adaptativa con chat -->
         <div class="ia-message-container">
-            <h2>Mensaje adaptativo IA</h2>
-            <div id="mensajeIA" class="mensaje-ia">
-                <p id="mensajeIATexto"></p>
-            </div>
+            <h2>Mensajes con IA adaptativa</h2>
         </div>
-    </div>
-
-    <!-- Debajo de las dos primeras columnas: Gráfico -->
-    <div class="chart-section chart-container">
-        <h2>Gráfico de estados de ánimo</h2>
-        <canvas id="moodChart"></canvas>
-    </div>
+    </div> 
 
     <!-- Particulas del fondo animado -->
     <div id="particles-js"></div>
