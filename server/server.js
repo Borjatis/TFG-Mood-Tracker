@@ -35,11 +35,11 @@ app.post("/api/mood-response", async (req, res) => {
       })
     });
 
-     // 🔹 Verificar si la API devuelve un error
+     // Verificar si la API devuelve un error
     const data = await mensajeIA.json();
     console.log("Respuesta completa de Hugging Face:", data);
 
-    // ✅ Validación antes de acceder
+    // Validación antes de acceder
     const mensaje = data?.[0]?.generated_text || "No se pudo generar la respuesta 😓";
     res.json({ mensaje });
 

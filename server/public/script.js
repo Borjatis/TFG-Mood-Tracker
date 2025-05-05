@@ -330,6 +330,14 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         options: {
             plugins: {
+                legend: {
+                    labels: {
+                        color: 'black', // Color de la leyenda
+                        font: {
+                            size: 20     // Tamaño de fuente de la leyenda
+                        }
+                    }
+                },
                 tooltip: {
                     enabled: false // 🔹 Oculta los tooltips al pasar el mouse
                 }
@@ -340,6 +348,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 y: {
                     ticks: {
+                        color: 'black', // Color del texto de las etiquetas
+                        font: {
+                            size: 16     // Tamaño del texto de las etiquetas
+                        },
                         callback: function(value) {
                             const moods = ["Triste", "Ansioso", "Relajado", "Feliz"];
                             return moods[value] || "";
@@ -416,77 +428,103 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //INTEGRACIÓN DE IA GENERATIVA
 // Modificar la función de IA para guardar el mensaje sin mostrarlo en la interfaz
- function generarMensajeIA(mood) {
-     fetch('http://localhost:3000/api/mood-response', {
-       method: 'POST',
-       headers: { 'Content-Type': 'application/json' },
-       body: JSON.stringify({ mood })
-     })
-     .then(res => res.json())
-     .then(data => {
-       // Guardar el mensaje de la IA en el localStorage
-       localStorage.setItem('iaMessage', data.message);
+// function generarMensajeIA(mood) {
+//     fetch('http://localhost:3000/api/mood-response', {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify({ mood })
+//     })
+//     .then(res => res.json())
+//     .then(data => {
+//     // Guardar el mensaje de la IA en el localStorage
+//     localStorage.setItem('iaMessage', data.message);
 
-       // Si quieres que lo lea en voz alta:
-       if ('speechSynthesis' in window) {
-         const utterance = new SpeechSynthesisUtterance(data.message);
-         utterance.lang = "es-ES";
-         speechSynthesis.speak(utterance);
-       }
-     })
-     .catch(err => {
-       console.error("Error al generar mensaje:", err);
-       // Almacenar un mensaje predeterminado en caso de error
-       localStorage.setItem('iaMessage', "No he podido generar un mensaje ahora mismo 😕");
-     });
- }
-
-// Modificar la función de IA para que acepte un valor manual desde la consola para pruebas
-// function generarmensajeia(mood) {
-//     console.log(`estado de ánimo recibido: ${mood}`);
-    
-//     // aquí se simula la respuesta de la ia
-//     let simulatedmessage = "";
-
-//     switch (mood) {
-//         case "feliz":
-//             simulatedmessage = "¡qué bueno verte feliz! 😊";
-//             break;
-//         case "triste":
-//             simulatedmessage = "venga, todo mejorará. 😌";
-//             break;
-//         case "ansioso":
-//             simulatedmessage = "respira profundo, todo va a estar bien. 🌿";
-//             break;
-//         case "relajado":
-//             simulatedmessage = "qué bueno que te sientas relajado. 🌊";
-//             break;
-//         default:
-//             simulatedmessage = "¡no te preocupes, todo está bien! 😄";
-//             break;
-//     }
-
-//     // Guardar el mensaje simulado en el localStorage
-//     localStorage.setItem('iaMessage', simulatedMessage);
-
-//     // Mostrar el mensaje en el HTML
-//     const mensajeElemento = document.getElementById('mensajeIATexto');
-//     const mensajeContenedor = document.getElementById('mensajeIA');
-
-//     // Cambiar el texto del elemento y agregar la clase 'visible' para animarlo
-//     mensajeElemento.innerHTML = simulatedMessage;
-//     mensajeContenedor.classList.add('visible'); // Añadir la clase 'visible' para activar la animación
-
-//     // Aquí también puedes probar que el mensaje se lea en voz alta
+//     // Si quieres que lo lea en voz alta:
 //     if ('speechSynthesis' in window) {
-//         const utterance = new SpeechSynthesisUtterance(simulatedMessage);
+//         const utterance = new SpeechSynthesisUtterance(data.message);
 //         utterance.lang = "es-ES";
 //         speechSynthesis.speak(utterance);
 //     }
-
-//     // Imprimir el mensaje simulado en consola
-//     console.log("Mensaje generado por la IA: ", simulatedMessage);
+//     })
+//     .catch(err => {
+//     console.error("Error al generar mensaje:", err);
+//     // Almacenar un mensaje predeterminado en caso de error
+//     localStorage.setItem('iaMessage', "No he podido generar un mensaje ahora mismo 😕");
+//     });
 // }
+
+
+let voiceEnabled = true; // Voz activada por defecto
+
+document.getElementById('voice-toggle').addEventListener('change', (e) => {
+  voiceEnabled = e.target.checked;
+});
+
+function speak(text) {
+  if (!voiceEnabled) return;
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "es-ES";
+  speechSynthesis.speak(utterance);
+}
+
+function addMessage(sender, text) {
+  const message = document.createElement('div');
+  message.classList.add('chat-message', sender);
+  message.textContent = text;
+  document.getElementById('chat-messages').appendChild(message);
+  document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+
+  if (sender === 'ia') speak(text);
+}
+
+async function enviarMensaje() {
+  const input = document.getElementById("chat-input");
+  const userMessage = input.value.trim();
+  if (!userMessage) return;
+
+  addMessage("user", userMessage);
+  input.value = "";
+
+  // Puedes reemplazar esto por una llamada real a tu API IA
+  const iaReply = "Gracias por compartir eso. ¿Quieres contarme más?";
+  addMessage("ia", iaReply);
+}
+
+// Esto genera automáticamente un mensaje IA al seleccionar el estado de ánimo
+function generarMensajeIA(mood) {
+  console.log(`Estado de ánimo recibido: ${mood}`);
+
+  let simulatedMessage = "";
+  switch (mood) {
+    case "feliz":
+      simulatedMessage = "¡Qué bueno verte feliz! 😊";
+      break;
+    case "triste":
+      simulatedMessage = "Venga, todo mejorará. 😌";
+      break;
+    case "ansioso":
+      simulatedMessage = "Respira profundo, todo va a estar bien. 🌿";
+      break;
+    case "relajado":
+      simulatedMessage = "Qué bueno que te sientas relajado. 🌊";
+      break;
+    default:
+      simulatedMessage = "¡No te preocupes, todo está bien! 😄";
+  }
+
+  // Guarda en localStorage
+  localStorage.setItem('iaMessage', simulatedMessage);
+
+  // Muestra también en el bloque de mensaje grande animado
+  const mensajeElemento = document.getElementById('mensajeIATexto');
+  const mensajeContenedor = document.getElementById('mensajeIA');
+  mensajeElemento.innerHTML = simulatedMessage;
+  mensajeContenedor.classList.add('visible');
+
+  // Además lo añade al chat adaptativo
+  addMessage("ia", simulatedMessage);
+}
+
 
 
 //ANTIGUA, GENERABA AUDIO DE ERROR!

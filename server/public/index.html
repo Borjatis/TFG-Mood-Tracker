@@ -71,6 +71,12 @@
                         <input type="checkbox" id="background-toggle" checked>
                     </div>
 
+                    <!-- Controlar voz de la IA -->
+                    <div><br>
+                        <label>Activar voz de la IA</label>
+                        <input type="checkbox" id="voice-toggle" checked>
+                    </div>                     
+
                     <!-- Control de volumen -->
                     <div><br>
                         <label for="volume-slider">Volumen:</label>
@@ -96,6 +102,20 @@
         <!-- Segundo bloque: Mensaje IA adaptativa con chat -->
         <div class="ia-message-container">
             <h2>Mensajes con IA adaptativa</h2>
+        
+            <!-- Mensaje inicial adaptativo -->
+            <div id="mensajeIA" class="mensaje-ia">
+            <p id="mensajeIATexto">¡Hola! ¿Cómo te sientes hoy? 😊</p>
+            </div>
+        
+            <!-- Chat con IA -->
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages"></div>
+                <form id="chat-form">
+                    <input type="text" id="user-input" placeholder="Escribe tu mensaje..." autocomplete="off" />
+                    <button type="submit">Enviar</button>
+                </form>
+            </div>
         </div>
     </div> 
 
