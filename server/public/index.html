@@ -102,18 +102,14 @@
         <!-- Segundo bloque: Mensaje IA adaptativa con chat -->
         <div class="ia-message-container">
             <h2>Mensajes con IA adaptativa</h2>
-        
-            <!-- Mensaje inicial adaptativo -->
-            <div id="mensajeIA" class="mensaje-ia">
-            <p id="mensajeIATexto">¡Hola! ¿Cómo te sientes hoy? 😊</p>
-            </div>
-        
-            <!-- Chat con IA -->
             <div class="chat-container">
-                <div class="chat-messages" id="chat-messages"></div>
+                <!-- Chat con IA, con mensaje inicial -->
+                <div class="chat-messages" id="chat-messages">
+                    <div class="chat-message ia">¡Hola! ¿Cómo te sientes hoy? 😊</div>
+                </div>
                 <form id="chat-form">
-                    <input type="text" id="user-input" placeholder="Escribe tu mensaje..." autocomplete="off" />
-                    <button type="submit">Enviar</button>
+                    <input type="text" id="user-input" placeholder="Escribe tu mensaje..." autocomplete="off" disabled />
+                    <button type="submit" id="send-button" disabled>Enviar</button>
                 </form>
             </div>
         </div>

@@ -164,15 +164,6 @@ button:hover {
   }
 }
 
-/* Estilo para los comentarios */
-/* em {
-  color: #555;
-  font-style: italic;
-  font-size: 0.9rem;
-  display: block;
-  margin-top: 5px;
-} */
-
 /* Zona inferior de dos bloques */
 .block {
   display: flex;
@@ -293,13 +284,14 @@ canvas {
 }
 
 
-/* Estilos para el segundo bloque correspondiente a los mensajes IA adaptativa*/
+/* ********* Estilos para el segundo bloque correspondiente a los mensajes IA adaptativa *************/
+/* Estilos para el contenedor principal de la IA */
 .ia-message-container {
   width: 31%;
   height: 600px;
   padding: 20px;
   margin-top: 50px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0);
   border-radius: 10px;
   backdrop-filter: blur(10px);
   border: 2px solid #060606;
@@ -307,59 +299,53 @@ canvas {
   flex-direction: column;
 }
 
-.mensaje-ia {
-  margin-top: 20px;
-  padding: 15px;
-  background: rgb(255, 255, 255);
-  border-radius: 10px;
-  min-height: 100px;
-}
-
-.mensaje-ia.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.mensaje-ia p {
-  margin: 0;
-  line-height: 1.4;
-}
-
+/* Contenedor del chat */
 .chat-container {
+  font-size: 1.1rem;
   margin-top: 20px;
   display: flex;
-  flex-grow: 1;
   flex-direction: column;
   gap: 10px;
+  flex-grow: 1;
 }
 
+/* Estilo para los mensajes del chat */
 .chat-messages {
   flex-grow: 1;
-  max-height: 200px;
   overflow-y: auto;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(253, 253, 253, 0.922);
   padding: 10px;
   border-radius: 8px;
   margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Estilo para el mensaje del usuario (a la derecha) */
 .chat-message.user {
   align-self: flex-end;
+  margin-left: auto;
+  margin-bottom: 10px;
   background-color: #d0f0ff;
   color: #000;
 }
 
+/* Estilo para el mensaje de la IA (a la izquierda) */
 .chat-message.ia {
   align-self: flex-start;
-  background-color: #e6e6e6;
+  margin-right: auto;
+  margin-bottom: 10px;
+  background-color: #d7d7d7;
   color: #000;
 }
 
+/* Estilo para el formulario de entrada */
 #chat-form {
   display: flex;
   gap: 10px;
 }
 
+/* Estilo para el campo de texto */
 #user-input {
   flex: 1;
   font-size: 1.1rem;
@@ -371,6 +357,26 @@ canvas {
   resize: none;
 }
 
+/* Estilo para los botones */
+.chat-container button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* #chat-form button {
+  font-size: 1.3rem;
+  padding: 10px;
+  margin: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  border-radius: 5px;
+  border: 1.5px solid #060606;
+} */
+
+/* #chat-form button:hover {
+  background-color: #45a049;
+  transform: scale(1.1);
+} */
 
 /* Estilos de las particulas del fondo animado */
 #particles-js {
