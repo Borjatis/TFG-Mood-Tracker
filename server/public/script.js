@@ -1,14 +1,14 @@
 let attempts = 0; // Contador para realizar el seguimiento de los intentos
 let mood = null; // Estado de ánimo
 
-// Sonidos para cada estado de ánimo
+// Audiciones para cada estado de ánimo
 const happySound = new Audio('sounds/happy.mp3');
 const sadSound = new Audio('sounds/sad.mp3');
 const anxiousSound = new Audio('sounds/anxious.mp3');
 const relaxedSound = new Audio('sounds/relaxed.mp3');
 const warningSound = new Audio('sounds/warning.mp3');
 
-// Función para detener cualquier sonido que esté en reproducción
+// Función para detener cualquier audición que esté en reproducción
 function stopCurrentSound() {
     happySound.pause();
     sadSound.pause();
@@ -130,18 +130,24 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-let isSoundEnabled = true; // Verificar si los sonidos están habilitados
+let isSoundEnabled = true; // Verificar si las audiciones están habilitados
 let isParticlesEnabled = true; // Variable para controlar el fondo animado
 
-// Asegurarse de que el checkbox de sonidos y fondo animado esté disponible
+// Asegurarse de que el checkbox de audiciones y fondo animado esté disponible
 document.addEventListener('DOMContentLoaded', function () {
-    // Control de sonido
+    // Activar bucles para que las audiciones se repitan automáticamente
+    happySound.loop = true;
+    sadSound.loop = true;
+    anxiousSound.loop = true;
+    relaxedSound.loop = true;
+    
+    // Control de audición
     const soundToggle = document.getElementById('sound-toggle');
     soundToggle.addEventListener("change", function () {
         const isChecked = this.checked;
         isSoundEnabled = isChecked;
         if (isChecked) {
-            // Reproduce el sonido correspondiente al estado actual
+            // Reproduce la audición correspondiente al estado actual
             if (mood === "feliz") happySound.play();
             else if (mood === "triste") sadSound.play();
             else if (mood === "ansioso") anxiousSound.play();
@@ -162,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const volumeSlider = document.getElementById('volume-slider');
     const volumeLevel = document.getElementById('volume-level');
 
-    // Establecer el volumen inicial al 40% y actualizar sonidos
+    // Establecer el volumen inicial al 40% y actualizar audiciones
     const setVolume = (volume) => {
         volumeLevel.textContent = `${Math.round(volume * 100)}%`;
         [happySound, sadSound, anxiousSound, relaxedSound, warningSound].forEach(sound => sound.volume = volume);
@@ -188,9 +194,9 @@ document.getElementById('mood-form').addEventListener('submit', function (event)
     const moodSelect = document.getElementById('mood');
     const moodIcon = document.getElementById("mood-icon");
 
-    // Si los sonidos están habilitados, reproducir el sonido de clic al interactuar con el formulario
+    // Si las audiciones están habilitadas, reproducir el sonido de clic al interactuar con el formulario
     if (isSoundEnabled && mood !== "") {
-        stopCurrentSound(); // Detener cualquier sonido anterior
+        stopCurrentSound(); // Detener cualquier audición anterior
     }
 
     // Guardar en el historial
@@ -229,10 +235,10 @@ document.getElementById('mood-form').addEventListener('submit', function (event)
         // Limpiar cualquier clase de estado de ánimo anterior
         document.body.classList.remove("feliz", "triste", "ansioso", "relajado");
 
-        // Detener cualquier sonido anterior antes de reproducir uno nuevo
+        // Detener cualquier audición anterior antes de reproducir uno nuevo
         stopCurrentSound();
 
-        // Aplicar la clase correspondiente según el estado seleccionado, reproducir el sonido adecuado
+        // Aplicar la clase correspondiente según el estado seleccionado, reproducir la audición adecuada
         // Y cambio de efectos de partículas según el estado de ánimo
         if (mood === "feliz") {
             document.body.classList.add("feliz");
@@ -427,18 +433,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // INTEGRACIÓN DE IA GENERATIVA
-let voiceEnabled = true; // Voz activada por defecto
+let voiceEnabled = true; // Voz de la IA activada por defecto
 
-// Desactivar el input y botón hasta que se seleccione el estado de ánimo
-document.getElementById("user-input").disabled = true;
-document.querySelector("#chat-form button").disabled = true;
+// Elementos DOM que se usan en varias funciones
+const input = document.getElementById("user-input");
+const sendButton = document.querySelector("#chat-form button");
+const chatMessages = document.getElementById('chat-messages');
 
-// Control del interruptor de voz
+// Desactivar el input y botón del chat hasta que se seleccione el estado de ánimo
+input.disabled = true;
+sendButton.disabled = true;
+
+// Control del interruptor de voz de la IA
 document.getElementById('voice-toggle')?.addEventListener('change', (e) => {
     voiceEnabled = e.target.checked;
 });
 
-// Función para hablar usando voz sintética
+// Función para que la IA hable en voz alta 
 function speak(text) {
     if (!voiceEnabled) return;
     const utterance = new SpeechSynthesisUtterance(text);
@@ -451,27 +462,25 @@ function addMessage(sender, text) {
     const message = document.createElement('div');
     message.classList.add('chat-message', sender);
     message.textContent = text;
-    document.getElementById('chat-messages').appendChild(message);
+    chatMessages.appendChild(message);
+
+    // Desplazar hacia abajo en caso de scroll
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 
     if (sender === 'ia') speak(text);
 }
 
 // Enviar mensaje del usuario y recibir respuesta IA
 async function enviarMensaje() {
-    const input = document.getElementById("user-input");
-    const sendButton = document.querySelector("#chat-form button");
     const userMessage = input.value.trim();
     if (!userMessage) return;
 
     addMessage("user", userMessage);
     sendButton.disabled = true;
 
-    //Scroll automático con enfoque en el chat
+    // Enfoque en el chat
     input.value = "";
     input.focus();
-    setTimeout(() => {
-        window.scrollBy({ top: -250, behavior: "smooth" });
-    }, 100);
 
     // Simulación de respuesta IA (puedes cambiar esto por llamada a API)
     const iaReply = "Gracias por compartir eso. ¿Quieres contarme más?";
@@ -480,21 +489,17 @@ async function enviarMensaje() {
 
 // Al seleccionar un estado de ánimo
 function onMoodSelected(mood) {
-    const input = document.getElementById("user-input");
-    const sendButton = document.querySelector("#chat-form button");
-
     // Activar input pero mantener botón desactivado hasta que se escriba algo
     input.disabled = false;
     sendButton.disabled = true;
 
-    //Scroll automático con enfoque en el chat
+    // Scroll automático con enfoque en el chat
     input.focus();
     setTimeout(() => {
         window.scrollBy({ top: -250, behavior: "smooth" });
     }, 100);
 
     // Añadir mensaje inicial como IA en el chat (solo si aún no está)
-    const chatMessages = document.getElementById('chat-messages');
     if (!chatMessages.querySelector('.chat-message.ia')) {
         addMessage("ia", "¡Hola! ¿Cómo te sientes hoy? 😊");
     }
@@ -509,18 +514,14 @@ function onMoodSelected(mood) {
 // Prevenir envío con Enter si input desactivado o vacío
 document.getElementById("chat-form").addEventListener("submit", function(e) {
     e.preventDefault();
-    const input = document.getElementById("user-input");
     if (!input.disabled && input.value.trim() !== "") {
         enviarMensaje();
     }
 });
 
 // Deshabilitar botón Enviar si el input está vacío
-const inputField = document.getElementById("user-input");
-const sendButton = document.querySelector("#chat-form button");
-
-inputField.addEventListener("input", () => {
-    sendButton.disabled = inputField.value.trim() === "";
+input.addEventListener("input", () => {
+    sendButton.disabled = input.value.trim() === "";
 });
 
 //     !!!! CÓDIGO A DESCOMENTAR EN CASO DE NO DISPONER DE UNA CLAVE API ¡¡¡¡
@@ -531,19 +532,19 @@ function generarMensajeIA(mood) {
     let simulatedMessage = "";
     switch (mood) {
         case "feliz":
-        simulatedMessage = "¡Qué bueno verte feliz! 😊";
-        break;
+            simulatedMessage = "¡Qué bueno verte feliz! 😊";
+            break;
         case "triste":
-        simulatedMessage = "Venga, todo mejorará 😌";
-        break;
+            simulatedMessage = "Venga, todo mejorará 😌";
+            break;
         case "ansioso":
-        simulatedMessage = "Respira profundo, todo va a estar bien 🌿";
-        break;
+            simulatedMessage = "Respira profundo, todo va a estar bien 🌿";
+            break;
         case "relajado":
-        simulatedMessage = "Qué bueno que te sientas relajado 🌊";
-        break;
+            simulatedMessage = "Qué bueno que te sientas relajado 🌊";
+            break;
         default:
-        simulatedMessage = "¡No te preocupes, todo está bien! 😄";
+            simulatedMessage = "¡No te preocupes, todo está bien! 😄";
     }
 
     // Guarda en localStorage

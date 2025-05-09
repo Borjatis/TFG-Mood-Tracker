@@ -311,6 +311,7 @@ canvas {
 
 /* Estilo para los mensajes del chat */
 .chat-messages {
+  max-height: 350px;
   flex-grow: 1;
   overflow-y: auto;
   background: rgba(253, 253, 253, 0.922);
