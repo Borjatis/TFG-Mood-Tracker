@@ -35,6 +35,7 @@ Abre la terminal (o Git Bash) y ejecuta:
     ```bash
     git clone https://github.com/Borjatis/TFG-Mood-Tracker.git
     cd TFG-Mood-Tracker
+    cd server
 
 
 ### 2. Instala las dependencias
