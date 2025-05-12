@@ -439,10 +439,12 @@ let voiceEnabled = true; // Voz de la IA activada por defecto
 const input = document.getElementById("user-input");
 const sendButton = document.querySelector("#chat-form button");
 const chatMessages = document.getElementById('chat-messages');
+const voiceButton = document.getElementById('voice-button');
 
-// Desactivar el input y botón del chat hasta que se seleccione el estado de ánimo
+// Desactivar el input y los botones del chat hasta que se seleccione el estado de ánimo
 input.disabled = true;
 sendButton.disabled = true;
+voiceButton.disabled = true;
 
 // Control del interruptor de voz de la IA
 document.getElementById('voice-toggle')?.addEventListener('change', (e) => {
@@ -455,6 +457,42 @@ function speak(text) {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "es-ES";
     speechSynthesis.speak(utterance);
+}
+
+// Reconocimiento de voz del usuario
+const recognition = window.SpeechRecognition || window.webkitSpeechRecognition
+   ? new (window.SpeechRecognition || window.webkitSpeechRecognition)()
+   : null;
+
+if (recognition) {
+    recognition.lang = 'es-ES';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    voiceButton.addEventListener('click', () => {
+        recognition.start();
+        voiceButton.disabled = true;
+        voiceButton.textContent = "🎙️ Escuchando...";
+    });
+
+    recognition.addEventListener('result', (event) => {
+        const transcript = event.results[0][0].transcript;
+        input.value = transcript;
+        input.dispatchEvent(new Event('input')); // Para activar el botón de enviar
+    });
+
+    recognition.addEventListener('end', () => {
+        voiceButton.disabled = false;
+        voiceButton.textContent = "🎤";
+    });
+
+    recognition.addEventListener('error', (e) => {
+        console.error("Error de reconocimiento de voz:", e.error);
+        voiceButton.disabled = false;
+        voiceButton.textContent = "🎤";
+    });
+} else {
+    voiceButton.style.display = "none";
+    console.warn("Reconocimiento de voz no compatible con este navegador.");
 }
 
 // Añadir mensajes al contenedor de chat
@@ -489,9 +527,10 @@ async function enviarMensaje() {
 
 // Al seleccionar un estado de ánimo
 function onMoodSelected(mood) {
-    // Activar input pero mantener botón desactivado hasta que se escriba algo
+    // Activar input y micro, pero mantener botón desactivado hasta que se escriba algo
     input.disabled = false;
     sendButton.disabled = true;
+    voiceButton.disabled = false;
 
     // Scroll automático con enfoque en el chat
     input.focus();
@@ -591,37 +630,6 @@ function generarMensajeIA(mood) {
 //       mensajeContenedor.classList.add('visible');
 //     });
 //   }
-
-//ANTIGUA, GENERABA AUDIO DE ERROR!
-// function generarMensajeIA(mood) {
-//     fetch('http://localhost:3000/api/mood-response', {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ mood })
-//     })
-//     .then(res => res.json())
-//     .then(data => {
-//       const contenedor = document.getElementById("mensajeIA");
-//       const texto = document.getElementById("mensajeIATexto");
-  
-//       texto.textContent = data.message;
-//       contenedor.classList.remove("oculto"); // Lo hace visible si estaba oculto
-  
-//       // Si quieres que lo lea en voz alta:
-//       if ('speechSynthesis' in window) {
-//         const utterance = new SpeechSynthesisUtterance(data.mensaje);
-//         utterance.lang = "es-ES";
-//         speechSynthesis.speak(utterance);
-//       }
-//     })
-//     .catch(err => {
-//       console.error("Error al generar mensaje:", err);
-//       const texto = document.getElementById("mensajeIATexto");
-//       texto.textContent = "No he podido generar un mensaje ahora mismo 😕";
-//       document.getElementById("mensajeIA").classList.remove("oculto");
-//     });
-// }
-
 
 
   
