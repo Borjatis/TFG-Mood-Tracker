@@ -29,6 +29,16 @@
         <div class="columns">            
             <form id="mood-form">
                 <h2>Selecciona tu estado de ánimo <span id="mood-icon">🙂</span></h2>
+
+                <!-- Selector del proveedor de IA -->
+                <div id="ia-provider-container">
+                    <label for="iaProviderSelect"><strong>Proveedor de IA:</strong></label>
+                    <select id="iaProviderSelect">
+                        <option value="openai">OpenAI</option>
+                        <option value="hf">Hugging Face</option>
+                    </select>
+                </div>
+
                 <select id="mood" name="mood">
                     <option value="">Selecciona un estado</option>
                     <option value="feliz">Feliz</option>

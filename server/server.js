@@ -1,4 +1,4 @@
-// server.js (servidor proxy a Hugging Face)
+// server.js (servidor proxy a Hugging Face, OpenAI)
 
 const express = require("express");
 const app = express();
@@ -18,7 +18,7 @@ app.use(express.static("public"));
 app.use(express.json());
 
 // Endpoint IA adaptado a Hugging Face
-app.post("/api/mood-response", async (req, res) => {
+app.post("/api/mood-response-hf", async (req, res) => {
   const { mood } = req.body;
 
   console.log(`Mood recibido: ${mood}`);
@@ -34,7 +34,7 @@ app.post("/api/mood-response", async (req, res) => {
         inputs: `Dame una respuesta simpática en español para alguien que se siente ${mood} en tono cercano y agradable. Tambien sugierele si necesita algo.`
       })
     });
-
+    
      // Verificar si la API devuelve un error
     const data = await mensajeIA.json();
     console.log("Respuesta completa de Hugging Face:", data);
@@ -51,4 +51,40 @@ app.post("/api/mood-response", async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`✅ Servidor del Mood Tracker activo en http://localhost:${PORT}`);
+});
+
+
+// Endpoint IA adaptado a OpenAI
+const { OpenAI } = require("openai");
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+app.post("/api/mood-response-openai", async (req, res) => {
+  const { mood } = req.body;
+  console.log(`🧠 OpenAI - Estado recibido: ${mood}`);
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content: "Eres un asistente empático que responde en español con frases breves, simpáticas y con tono cercano."
+        },
+        {
+          role: "user",
+          content: `Una persona se siente ${mood}. Dale una respuesta simpática, en español, con una sugerencia útil si es posible.`
+        }
+      ],
+      max_tokens: 60,      // Máximo de palabras, para que no se dispare el coste
+      temperature: 0.8     // Creatividad moderada (0.7–0.9 es ideal para empatía)
+    });
+
+    const mensaje = completion.choices[0].message.content.trim();
+    console.log("✅ OpenAI respondió:", mensaje);
+    res.json({ mensaje });
+
+  } catch (err) {
+    console.error("❌ Error llamando a OpenAI:", err);
+    res.status(500).json({ mensaje: "Error generando mensaje con OpenAI" });
+  }
 });

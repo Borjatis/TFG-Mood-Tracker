@@ -100,6 +100,10 @@ body.relajado {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.355);
 }
 
+#ia-provider-container {
+  margin-bottom: 1em
+}
+
 #mood-comment {
   font-size: 1.1rem;
   width: 80%;

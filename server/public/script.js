@@ -495,6 +495,30 @@ if (recognition) {
     console.warn("Reconocimiento de voz no compatible con este navegador.");
 }
 
+// SELECTOR DE IA
+// IA Seleccionada local storage
+const iaProvider = localStorage.getItem("iaProvider") || "hf";
+document.getElementById("iaProviderSelect").value = iaProvider;
+
+document.getElementById("iaProviderSelect").addEventListener("change", (e) => {
+    localStorage.setItem("iaProvider", e.target.value);
+});
+
+// Cargar valor guardado en localStorage (si existe)
+document.addEventListener("DOMContentLoaded", () => {
+    const select = document.getElementById("iaProviderSelect");
+    const saved = localStorage.getItem("iaProvider");
+
+    if (saved && (saved === "openai" || saved === "hf")) {
+    select.value = saved;
+    }
+
+    // Guardar en localStorage cuando el usuario cambia de proveedor
+    select.addEventListener("change", () => {
+    localStorage.setItem("iaProvider", select.value);
+    });
+});
+
 // Añadir mensajes al contenedor de chat
 function addMessage(sender, text) {
     const message = document.createElement('div');
@@ -520,9 +544,29 @@ async function enviarMensaje() {
     input.value = "";
     input.focus();
 
-    // Simulación de respuesta IA (puedes cambiar esto por llamada a API)
-    const iaReply = "Gracias por compartir eso. ¿Quieres contarme más?";
-    addMessage("ia", iaReply);
+    // Seleccionar proveedor (igual que en generarMensajeIA)
+    const iaProvider = document.getElementById("iaProviderSelect")?.value || "hf";
+    const endpoint = iaProvider === "openai"
+        ? "http://localhost:3000/api/mood-response-openai"
+        : "http://localhost:3000/api/mood-response-hf";
+
+    try {
+        const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mood: userMessage }) // Enviamos el mensaje completo
+        });
+
+        const data = await res.json();
+        const iaReply = data.mensaje || "Lo siento, ahora mismo no puedo responder 😕";
+
+        addMessage("ia", iaReply);
+    } catch (err) {
+        console.error("❌ Error al obtener respuesta de la IA:", err);
+        addMessage("ia", "Algo salió mal intentando responder. Inténtalo más tarde 🙈");
+    } finally {
+        sendButton.disabled = false;
+    }
 }
 
 // Al seleccionar un estado de ánimo
@@ -563,9 +607,56 @@ input.addEventListener("input", () => {
     sendButton.disabled = input.value.trim() === "";
 });
 
+
+//     !!!! CÓDIGO A COMENTAR EN CASO DE NO DISPONER DE UNA CLAVE API ¡¡¡¡
+function generarMensajeIA(mood) {
+    const iaProvider = document.getElementById("iaProviderSelect")?.value || "hf"; // Default: Hugging Face
+    const endpoint = iaProvider === "openai"
+        ? "http://localhost:3000/api/mood-response-openai"
+        : "http://localhost:3000/api/mood-response-hf";
+
+    fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mood })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const mensaje = data.mensaje || "No he podido generar un mensaje ahora mismo 😕";
+
+        // Guardar mensaje en localStorage
+        localStorage.setItem('iaMessage', mensaje);
+
+        // Mostrar en el chat adaptativo
+        addMessage("ia", mensaje);
+
+        // Mostrar también en el mensaje grande animado (si existe)
+        const mensajeElemento = document.getElementById('mensajeIATexto');
+        const mensajeContenedor = document.getElementById('mensajeIA');
+        if (mensajeElemento && mensajeContenedor) {
+            mensajeElemento.innerHTML = mensaje;
+            mensajeContenedor.classList.add('visible');
+        }
+    })
+    .catch(err => {
+        console.error("Error al generar mensaje:", err);
+
+        const fallback = "No he podido generar un mensaje ahora mismo 😕";
+        localStorage.setItem('iaMessage', fallback);
+        addMessage("ia", fallback);
+
+        const mensajeElemento = document.getElementById('mensajeIATexto');
+        const mensajeContenedor = document.getElementById('mensajeIA');
+        if (mensajeElemento && mensajeContenedor) {
+            mensajeElemento.innerHTML = fallback;
+            mensajeContenedor.classList.add('visible');
+        }
+    });
+}
+
 //     !!!! CÓDIGO A DESCOMENTAR EN CASO DE NO DISPONER DE UNA CLAVE API ¡¡¡¡
 // Esto genera automáticamente un mensaje IA al seleccionar el estado de ánimo
-function generarMensajeIA(mood) {
+/* function generarMensajeIA(mood) {
     console.log(`Estado de ánimo recibido: ${mood}`);
 
     let simulatedMessage = "";
@@ -591,7 +682,7 @@ function generarMensajeIA(mood) {
 
     // Además lo añade al chat adaptativo
     addMessage("ia", simulatedMessage);
-}
+} */
 
 
 //     !!!! CÓDIGO A COMENTAR EN CASO DE NO DISPONER DE UNA CLAVE API ¡¡¡¡
