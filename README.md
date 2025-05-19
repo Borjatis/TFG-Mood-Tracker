@@ -22,7 +22,6 @@ Antes de empezar, asegúrate de tener instalado:
 
 - [Node.js](https://nodejs.org/) (versión recomendada: 18 o superior)
 - [Npm](https://www.npmjs.com/) (se instala automáticamente con Node.js)
-- Una cuenta de [OpenAI](https://platform.openai.com/) para obtener tu propia API Key
 
 
 ---
@@ -41,38 +40,25 @@ Abre la terminal (o Git Bash) y ejecuta:
 ### 2. Instala las dependencias
 En la misma terminal introduce:
     npm install
-    Esto descargará automáticamente todos los paquetes necesarios (guardados en package.json).
+
+Esto descargará automáticamente todos los paquetes necesarios (guardados en package.json).
 
 
 ### 3. Crea el archivo .env con tu clave de la IA
-El proyecto usa un archivo .env para proteger claves privadas. Crea uno en la raíz del servidor o del proyecto con este contenido:
-    HF_API_KEY=tu_clave_de_ia_aquí
-    PORT=3000
+El proyecto usa un archivo .env para proteger claves privadas. Crea uno en la raíz del servidor o del proyecto con tu IA utilizada en cada caso:
+    HF_API_KEY=tu_clave_api_huggingface
+    OPENAI_API_KEY=tu_clave_api_openai
+    DEEP_AI_API_KEY=tu_clave_api_deepai
 
 Aquí tienes algunos enlaces donde puedes registrarte para obtener claves API de distintas IA generativas:
-- OpenAI (ChatGPT, GPT-4, DALL·E, Whisper):
-    https://platform.openai.com/signup
+- OpenAI (Recomendado para mantener un flujo conversacional más natural y coherente):
+    https://platform.openai.com/account/api-keys
 
-- Hugging Face (Modelos Transformers y Spaces):
+- Hugging Face (Ideal para respuestas simples y contextuales en español):
     https://huggingface.co/settings/tokens
 
-- Azure AI (OpenAI Service, Cognitive Services):
-    https://portal.azure.com/ (buscar "OpenAI" o "Cognitive Services")
-
-- Google Cloud AI (Vertex AI, PaLM, Speech-to-Text):
-    https://console.cloud.google.com/apis/credentials
-
-- IBM Watson (NLP, Speech-to-Text, Visual Recognition):
-    https://cloud.ibm.com/apikeys
-
-- AssemblyAI (Transcripción de voz a texto):
-    https://app.assemblyai.com/signup
-
-- DeepAI (Imagen, texto, traducción, etc.):
-    https://deepai.org/api-key
-
-- Eleven Labs (Generación de voz realista):
-    https://elevenlabs.io/sign-up
+- DeepAI (Sencillo y rápido, ideal para respuestas cortas y directas):
+    https://deepai.org/
 
 
 #### 🧪 ¿No tienes clave de OpenAI? Usa el modo de prueba
