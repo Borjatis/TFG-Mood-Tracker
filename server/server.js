@@ -1,4 +1,4 @@
-// server.js (servidor proxy a Hugging Face, OpenAI)
+// server.js (servidor proxy a Hugging Face, OpenAI y DeepAI)
 
 const express = require("express");
 const app = express();
@@ -49,10 +49,6 @@ app.post("/api/mood-response-hf", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`✅ Servidor del Mood Tracker activo en http://localhost:${PORT}`);
-});
-
 
 // Endpoint IA adaptado a OpenAI
 const { OpenAI } = require("openai");
@@ -66,14 +62,8 @@ app.post("/api/mood-response-openai", async (req, res) => {
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
-        {
-          role: "system",
-          content: "Eres un asistente empático que responde en español con frases breves, simpáticas y con tono cercano."
-        },
-        {
-          role: "user",
-          content: `Una persona se siente ${mood}. Dale una respuesta simpática, en español, con una sugerencia útil si es posible.`
-        }
+        { role: "system", content: "Eres un asistente empático que responde en español con frases breves, simpáticas y con tono cercano." },
+        { role: "user", content: `Una persona se siente ${mood}. Dale una respuesta simpática, en español, con una sugerencia útil si es posible.` }
       ],
       max_tokens: 60,      // Máximo de palabras, para que no se dispare el coste
       temperature: 0.8     // Creatividad moderada (0.7–0.9 es ideal para empatía)
@@ -87,4 +77,35 @@ app.post("/api/mood-response-openai", async (req, res) => {
     console.error("❌ Error llamando a OpenAI:", err);
     res.status(500).json({ mensaje: "Error generando mensaje con OpenAI" });
   }
+});
+
+
+// Endpoint IA adaptado a DeepAI
+app.post("/api/mood-response-deepai", async (req, res) => {
+  const { mood } = req.body;
+
+  try {
+    const response = await fetch("https://api.deepai.org/api/text-generator", {
+      method: "POST",
+      headers: {
+        "Api-Key": process.env.DEEP_AI_API_KEY,
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams({
+        text: `Dame una respuesta simpática en español para alguien que se siente ${mood}. También sugiérele si necesita algo.`
+      })
+    });
+
+    const data = await response.json();
+    const mensaje = data.output || "No se pudo generar la respuesta 😓";
+    res.json({ mensaje });
+
+  } catch (err) {
+    console.error("Error llamando a DeepAI:", err);
+    res.status(500).json({ mensaje: "Error generando mensaje con DeepAI" });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`✅ Servidor del Mood Tracker activo en http://localhost:${PORT}`);
 });

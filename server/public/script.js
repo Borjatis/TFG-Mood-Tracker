@@ -509,8 +509,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const select = document.getElementById("iaProviderSelect");
     const saved = localStorage.getItem("iaProvider");
 
-    if (saved && (saved === "openai" || saved === "hf")) {
-    select.value = saved;
+    if (saved && (saved === "openai" || saved === "hf" || saved === "deepai")) {
+        select.value = saved;
     }
 
     // Guardar en localStorage cuando el usuario cambia de proveedor
@@ -546,9 +546,9 @@ async function enviarMensaje() {
 
     // Seleccionar proveedor (igual que en generarMensajeIA)
     const iaProvider = document.getElementById("iaProviderSelect")?.value || "hf";
-    const endpoint = iaProvider === "openai"
-        ? "http://localhost:3000/api/mood-response-openai"
-        : "http://localhost:3000/api/mood-response-hf";
+    const endpoint = iaProvider === "openai" ? "/api/mood-response-openai" :
+                     iaProvider === "deepai" ? "/api/mood-response-deepai" :
+                     "/api/mood-response-hf";
 
     try {
         const res = await fetch(endpoint, {
