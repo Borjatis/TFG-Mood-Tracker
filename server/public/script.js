@@ -529,7 +529,10 @@ function addMessage(sender, text) {
     // Desplazar hacia abajo en caso de scroll
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
-    if (sender === 'ia') speak(text);
+    // Solo leer si se indica
+    if (sender === "ia" && speak) {
+        speak(text);
+    }
 }
 
 // Enviar mensaje del usuario y recibir respuesta IA
@@ -590,9 +593,58 @@ function onMoodSelected(mood) {
     // Añadir el estado de ánimo como mensaje del usuario
     addMessage("user", `Me siento ${mood}`);
 
-    // Generar respuesta IA adaptativa
-    generarMensajeIA(mood);
+    // Mostrar recomendación adaptativa usando funciones auxiliares
+    cargarRecomendaciones().then(recomendaciones => {
+        const recomendacion = obtenerRecomendacion(mood, recomendaciones);
+        mostrarRecomendacion(recomendacion);
+    });
+
+    // Generar respuesta IA adaptativa, por si no se quisiera mostrar la recomendación primero
+    //generarMensajeIA(mood);
 }
+
+// Función para cargar recomendaciones desde JSON externo
+async function cargarRecomendaciones() {
+    const res = await fetch("recomendaciones.json");
+    return await res.json();
+}
+
+// Función para seleccionar recomendación
+function obtenerRecomendacion(mood, recomendaciones) {
+    const opciones = recomendaciones[mood];
+    if (!opciones || opciones.length === 0) return null;
+
+    //Elige aleatoriamente una recomendacion del array json
+    const randomIndex = Math.floor(Math.random() * opciones.length);
+    return opciones[randomIndex];
+}
+
+
+// Función para mostrar recomendación y permitir seguir chateando
+function mostrarRecomendacion(recomendacion) {
+    if (recomendacion) {
+        // Añadir el mensaje principal
+        addMessage("ia", recomendacion.mensaje);
+
+        // Añadir el recurso como enlace clicable (si lo hay)
+        if (recomendacion.recurso) {
+            const linkElement = document.createElement("a");
+            linkElement.href = recomendacion.recurso;
+            linkElement.target = "_blank";
+            linkElement.rel = "noopener noreferrer";
+            linkElement.textContent = "Enlace";
+            linkElement.classList.add("chat-link");
+
+            const wrapper = document.createElement("div");
+            wrapper.classList.add("chat-message", "ia");
+            wrapper.appendChild(linkElement);
+
+            chatMessages.appendChild(wrapper);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    }
+}
+
 
 // Prevenir envío con Enter si input desactivado o vacío
 document.getElementById("chat-form").addEventListener("submit", function(e) {

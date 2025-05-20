@@ -1,0 +1,43 @@
+{
+    "feliz": [
+      {
+        "mensaje": "Aprovecha esa buena energía y haz algo que siempre pospones. ¿Qué te parece una lista de tareas pendientes? ✅",
+        "recurso": null
+      },
+      {
+        "mensaje": "Aprovecha este buen ánimo para hacer algo que te guste. ¿Qué te parece una playlist animada? 🎶",
+        "recurso": "https://open.spotify.com/playlist/3ck7KjH34H20a48Ew37roz"
+      }
+    ],
+    "triste": [
+      {
+        "mensaje": "Si te sientes apenado, ¿qué tal un poco de humor para levantar el ánimo?",
+        "recurso": "https://www.youtube.com/watch?v=uJWYwCpbbhg&ab_channel=JuanchoBernab%C3%A9"
+      },
+      {
+        "mensaje": "A veces escribir lo que sientes puede ser liberador. ¿Quieres intentarlo?",
+        "recurso": null
+      }
+    ],
+    "ansioso": [
+      {
+        "mensaje": "Cierra los ojos, respira hondo y cuenta hasta 10. Si quieres, aquí tienes unos audios de respiración guiada: ",
+        "recurso": "https://psiconecta.org/blog/audios-de-relajacin-respiracin-y-meditacin-guiada"
+      },
+      {
+        "mensaje": "Si te sientes inquieto, prueba a estirar el cuerpo para aliviar el estrés y la ansiedad. Aquí tienes unos estiramientos sencillos: ",
+        "recurso": "https://www.youtube.com/watch?v=XT9VEY-pra0&ab_channel=MarianaQuevedo%7CFisioterapiaQuer%C3%A9taro"
+      }
+    ],
+    "relajado": [
+      {
+        "mensaje": "¿Te apetece mantener esa calma viendo una serie o película? Aquí tienes algunas sugerencias:",
+        "recurso": "https://pluto.tv/es/on-demand"
+      },
+      {
+        "mensaje": "Aprovecha la calma para disfrutar de algo que te guste. ¿Quizás un podcast interesante? 🎧",
+        "recurso": "https://podtail.com/es/top-podcasts/es/"
+      }
+    ]
+  }
+  
