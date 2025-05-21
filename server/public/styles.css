@@ -253,6 +253,10 @@ button:hover {
   overflow-y: auto;
 }
 
+#buttons-history button {
+  font-size: 1.1rem;
+}
+
 /* Estilos para los estados de ánimo en el historial */
 .mood-happy {
   color: #FFD700; /* Amarillo */

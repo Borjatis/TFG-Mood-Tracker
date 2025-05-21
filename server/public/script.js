@@ -129,6 +129,69 @@ document.addEventListener("DOMContentLoaded", function () {
     updateMoodHistoryUI();
 });
 
+// Funcion para descargar historial de estados de ánimo en formatos estándar como CSV o JSON
+function exportarJSON() {
+    const historial = JSON.parse(localStorage.getItem("moodHistory")) || [];
+    if (historial.length === 0) {
+      alert('El historial está vacío. No hay datos para exportar.');
+      return;
+    }
+  
+    const dataStr = JSON.stringify(historial, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+  
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'historial_emocional.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+  
+  function exportarCSV() {
+    const historial = JSON.parse(localStorage.getItem("moodHistory")) || [];
+    if (historial.length === 0) {
+      alert('El historial está vacío. No hay datos para exportar.');
+      return;
+    }
+  
+    const encabezados = ['fecha', 'estado', 'comentario', 'mensaje_IA'];
+    const filas = historial.map(e =>
+      encabezados.map(key => {
+        if (key === 'fecha') return `"${e.date || ''}"`;
+        if (key === 'estado') return `"${e.mood || ''}"`;
+        if (key === 'comentario') return `"${(e.comment || '').replace(/"/g, '""')}"`;
+        if (key === 'mensaje_IA') return `"${(e.iaMessage || '').replace(/"/g, '""')}"`;
+        return '""';
+      }).join(',')
+    );
+  
+    const csvContent = [encabezados.join(','), ...filas].join('\r\n');
+  
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+  
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'historial_emocional.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+  
+  // Conectar botones con funciones exportar
+  document.addEventListener('DOMContentLoaded', () => {
+    const btnJSON = document.getElementById('export-json-btn');
+    const btnCSV = document.getElementById('export-csv-btn');
+  
+    btnJSON.addEventListener('click', exportarJSON);
+    btnCSV.addEventListener('click', exportarCSV);
+  });
+  
+  
 
 let isSoundEnabled = true; // Verificar si las audiciones están habilitados
 let isParticlesEnabled = true; // Variable para controlar el fondo animado
@@ -619,7 +682,6 @@ function obtenerRecomendacion(mood, recomendaciones) {
     return opciones[randomIndex];
 }
 
-
 // Función para mostrar recomendación y permitir seguir chateando
 function mostrarRecomendacion(recomendacion) {
     if (recomendacion) {
@@ -644,7 +706,6 @@ function mostrarRecomendacion(recomendacion) {
         }
     }
 }
-
 
 // Prevenir envío con Enter si input desactivado o vacío
 document.getElementById("chat-form").addEventListener("submit", function(e) {
