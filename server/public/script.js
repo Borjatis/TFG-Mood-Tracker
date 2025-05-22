@@ -509,6 +509,81 @@ input.disabled = true;
 sendButton.disabled = true;
 voiceButton.disabled = true;
 
+// Mostrar mensaje inicial una vez al día
+document.addEventListener("DOMContentLoaded", () => {
+    const lastShownDate = localStorage.getItem("lastMoodPromptDate");
+    const today = new Date().toLocaleDateString("es-ES");
+
+    if (lastShownDate !== today) {
+        const mensajeInicial = "Recuerda que puedes registrar tu estado de ánimo cada día para recibir apoyo personalizado 😊";
+        const chatMessages = document.getElementById('chat-messages');
+        if (chatMessages) {
+            const message = document.createElement('div');
+            message.classList.add('chat-message', 'ia');
+            message.textContent = mensajeInicial;
+            chatMessages.appendChild(message);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Que también lo diga en voz alta si está activado
+            speak(mensajeInicial);
+        }
+
+        // Guardar fecha actual para no volver a mostrar hoy
+        localStorage.setItem("lastMoodPromptDate", today);
+
+        // Obtener historial y convertir al formato esperado por el backend
+        const rawHistory = JSON.parse(localStorage.getItem("moodHistory")) || [];
+
+        const historial = rawHistory.map(entry => ({
+            date: entry.date,
+            mood: entry.mood,
+            comment: entry.comment
+        }));
+
+        // Solo si hay al menos 2 registros, generar resumen emocional
+        if (historial.length >= 2) {
+            fetch("/api/analisis-emocional", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ historial })
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Error en la respuesta del servidor");
+                return res.json();
+            })
+            .then(data => {
+                const chatMessages = document.getElementById('chat-messages');
+                if (data.mensaje && chatMessages) {
+                    const resumen = document.createElement('div');
+                    resumen.classList.add('chat-message', 'ia');
+                    resumen.textContent = data.mensaje;
+                    chatMessages.appendChild(resumen);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                    speak(data.mensaje);
+                } else {
+                    throw new Error("Respuesta sin mensaje");
+                }
+            })
+            .catch(err => {
+                console.error("❌ Error al generar resumen emocional:", err);
+                const chatMessages = document.getElementById('chat-messages');
+                if (chatMessages) {
+                    const errorMsg = document.createElement('div');
+                    errorMsg.classList.add('chat-message', 'ia');
+                    errorMsg.textContent = "Lo siento, ahora mismo no puedo responder 😕";
+                    chatMessages.appendChild(errorMsg);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    speak("Lo siento, ahora mismo no puedo responder");
+                }
+            });
+        }
+    }
+});
+
+
 // Control del interruptor de voz de la IA
 document.getElementById('voice-toggle')?.addEventListener('change', (e) => {
     voiceEnabled = e.target.checked;
