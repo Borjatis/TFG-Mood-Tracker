@@ -153,7 +153,7 @@ app.post("/api/analisis-emocional", async (req, res) => {
   const prompt = `Este es el historial emocional de un usuario:\n${resumenHistorial}\n\nGenera un párrafo breve y empático que resuma cómo se ha sentido últimamente. Usa un tono cercano, reconfortante y en español. Puedes hacer una pequeña sugerencia positiva si es necesario, pero sin dar lecciones.`;
 
   try {
-    // 🔹 Primero intenta con OpenAI
+    //  Primero intenta con OpenAI
     if (process.env.OPENAI_API_KEY) {
       const completion = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
@@ -169,7 +169,7 @@ app.post("/api/analisis-emocional", async (req, res) => {
       return res.json({ mensaje });
     }
 
-    // 🔸 Luego intenta con Hugging Face
+    // Luego intenta con Hugging Face
     if (process.env.HF_API_KEY) {
       const response = await fetch("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3", {
         method: "POST",

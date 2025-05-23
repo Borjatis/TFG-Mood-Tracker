@@ -10,7 +10,7 @@ Este es un proyecto de seguimiento del estado de ánimo que adapta su interfaz v
 - 🔊 Interacción por voz (entrada y salida)
 - 🗓️ Historial de emociones con comentarios
 - 📊 Gráfico con la evolución de las emociones
-- 🤖 Conexión con IA generativa (OpenAI)
+- 🤖 Conexión con IA generativa (OpenAI o Hugging Face o DeepAI)
 - 🔧 Panel de configuración personalizable
 - 🛡️ Servidor Node.js para proteger claves privadas (OpenAI)
 
@@ -39,6 +39,7 @@ Abre la terminal (o Git Bash) y ejecuta:
 
 ### 2. Instala las dependencias
 En la misma terminal introduce:
+
     npm install
 
 Esto descargará automáticamente todos los paquetes necesarios (guardados en package.json).
@@ -46,6 +47,7 @@ Esto descargará automáticamente todos los paquetes necesarios (guardados en pa
 
 ### 3. Crea el archivo .env con tu clave de la IA
 El proyecto usa un archivo .env para proteger claves privadas. Crea uno en la raíz del servidor o del proyecto con tu IA utilizada en cada caso:
+
     HF_API_KEY=tu_clave_api_huggingface
     OPENAI_API_KEY=tu_clave_api_openai
     DEEP_AI_API_KEY=tu_clave_api_deepai
@@ -61,20 +63,8 @@ Aquí tienes algunos enlaces donde puedes registrarte para obtener claves API de
     https://deepai.org/
 
 
-#### 🧪 ¿No tienes clave de OpenAI? Usa el modo de prueba
-Si no dispones de una clave de OpenAI, puedes probar la app igualmente gracias a un modo de simulación.
-
-🔄 Instrucciones:
-
-- Abre el archivo: /server/public/js/script.js
-- En él encontraras un apartado al final, en el que pone: CÓDIGO A COMENTAR EN CASO DE NO DISPONER DE UNA CLAVE API
-- Comenta ese código o borralo
-- Tambien encontraras otro apartado donde pone: CÓDIGO A DESCOMENTAR EN CASO DE NO DISPONER DE UNA CLAVE API
-- Descomenta ese código
-
-⚠️ Importante: Nunca tengas las dos funciones activas a la vez. Solo debe existir una función llamada generarMensajeIA.
-
-De esta manera, cuando selecciones un estado de ánimo, recibirás un mensaje predefinido en lugar de una respuesta generada por IA.
+#### 🧪 ¿No dispones de ninguna clave API? Usa el modo de prueba
+Si no dispones de una clave API de cualquiera de las IA generativas, puedes probar la app igualmente gracias a un modo de simulación.
 
 
 ### 4. Ejecuta el servidor
@@ -82,6 +72,7 @@ De esta manera, cuando selecciones un estado de ánimo, recibirás un mensaje pr
     node server.js
 
 O si tienes un script start definido en package.json, puedes usar:
+
     npm start
 
 
@@ -91,10 +82,16 @@ O si tienes un script start definido en package.json, puedes usar:
 
 ¡Y listo! Ya puedes empezar a usar el Mood Tracker 🎉
 
+---
 
-✍️ Autor
-    Borja, Estudiante de Ingeniería de Telecomunicaciones – Especialidad Audiovisual
+### ✍️ *Autor*
 
-    TFG: Mood Tracker con interacción adaptativa mediante IA generativa
+*Borja*  
+*Estudiante de Ingeniería de Telecomunicaciones – Especialidad en Audiovisual*
 
-¡Gracias por probar el proyecto! Si tienes sugerencias o encuentras algún fallo, puedes abrir un issue en este repositorio o contactar conmigo.
+**TFG**: *Mood Tracker con interacción adaptativa mediante IA generativa*
+
+---
+
+¡Gracias por probar el proyecto!  
+Si tienes sugerencias o encuentras algún fallo, no dudes en [abrir un issue](#) en este repositorio o contactar conmigo directamente.
