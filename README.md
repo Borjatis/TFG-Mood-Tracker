@@ -80,7 +80,13 @@ O si tienes un script start definido en package.json, puedes usar:
     http://localhost:3000
 
 
-¡Y listo! Ya puedes empezar a usar el Mood Tracker 🎉
+#### ¡Y listo! Ya puedes empezar a usar el Mood Tracker 🎉
+
+
+
+🛑 Si deseas detener el servidor local, puedes hacerlo de la siguiente manera:
+    Presiona Ctrl + C en la terminal donde esté ejecutándose el servidor.
+    Esto finalizará el proceso y el servidor dejará de estar activo.
 
 ---
 
