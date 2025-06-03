@@ -497,6 +497,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // INTEGRACIÓN DE IA GENERATIVA
 let voiceEnabled = true; // Voz de la IA activada por defecto
+const historialChat = []; // Aquí se acumularán los mensajes del usuario e IA
+let estadoSeleccionado = null;
 
 // Elementos DOM que se usan en varias funciones
 const input = document.getElementById("user-input");
@@ -609,7 +611,7 @@ if (recognition) {
     voiceButton.addEventListener('click', () => {
         recognition.start();
         voiceButton.disabled = true;
-        voiceButton.textContent = "🎙️ Escuchando...";
+        voiceButton.textContent = "🎙️...";
     });
 
     recognition.addEventListener('result', (event) => {
@@ -657,6 +659,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+
 // Añadir mensajes al contenedor de chat
 function addMessage(sender, text) {
     const message = document.createElement('div');
@@ -666,6 +669,10 @@ function addMessage(sender, text) {
 
     // Desplazar hacia abajo en caso de scroll
     chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Guardar en el historial
+    const role = sender === "user" ? "user" : "assistant";
+    historialChat.push({ role, content: text });
 
     // Solo leer si se indica
     if (sender === "ia" && speak) {
@@ -687,31 +694,63 @@ async function enviarMensaje() {
 
     // Seleccionar proveedor (igual que en generarMensajeIA)
     const iaProvider = document.getElementById("iaProviderSelect")?.value || "hf";
-    const endpoint = iaProvider === "openai" ? "/api/mood-response-openai" :
-                     iaProvider === "deepai" ? "/api/mood-response-deepai" :
-                     "/api/mood-response-hf";
+    if (iaProvider === "openai") {
+        const historialFormateado = historialChat.map(msg => ({
+        sender: msg.role === "user" ? "usuario" : "ia",
+        texto: msg.content
+        }));
 
-    try {
-        const res = await fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mood: userMessage }) // Enviamos el mensaje completo
-        });
+        try {
+            const res = await fetch("/api/chat-openai", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                historial: historialFormateado,
+                mensajeUsuario: userMessage,
+                mood: estadoSeleccionado
+                })
+            });
 
-        const data = await res.json();
-        const iaReply = data.mensaje || "Lo siento, ahora mismo no puedo responder 😕";
+            const data = await res.json();
+            const iaReply = data.mensaje || "Lo siento, ahora mismo no puedo responder 😕";
+            
+            addMessage("ia", iaReply);
 
-        addMessage("ia", iaReply);
-    } catch (err) {
-        console.error("❌ Error al obtener respuesta de la IA:", err);
-        addMessage("ia", "Algo salió mal intentando responder. Inténtalo más tarde 🙈");
-    } finally {
-        sendButton.disabled = false;
+        } catch (err) {
+            console.error("❌ Error con OpenAI:", err);
+            addMessage("ia", "Ocurrió un error al contactar con OpenAI 🙈");
+        } finally {
+            sendButton.disabled = false;
+        }
+    } else {
+        // Proveedores Hugging Face o DeepAI
+        const endpoint = iaProvider === "deepai"
+        ? "/api/mood-response-deepai"
+        : "/api/mood-response-hf";
+
+        try {
+            const res = await fetch(endpoint, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ mood: userMessage })
+            });
+
+            const data = await res.json();
+            const iaReply = data.mensaje || "Lo siento, ahora mismo no puedo responder 😕";
+            addMessage("ia", iaReply);
+
+        } catch (err) {
+            console.error("❌ Error al obtener respuesta de la IA:", err);
+            addMessage("ia", "Ocurrió un error al contactar con la IA 🙈");
+        } finally {
+            sendButton.disabled = false;
+        }
     }
 }
 
 // Al seleccionar un estado de ánimo
 function onMoodSelected(mood) {
+    estadoSeleccionado = mood;
     // Activar input y micro, pero mantener botón desactivado hasta que se escriba algo
     input.disabled = false;
     sendButton.disabled = true;
@@ -796,7 +835,7 @@ input.addEventListener("input", () => {
 });
 
 
-//     !!!! CÓDIGO A COMENTAR EN CASO DE NO DISPONER DE UNA CLAVE API ¡¡¡¡
+// Esto genera automáticamente un mensaje IA al seleccionar el estado de ánimo
 function generarMensajeIA(mood) {
     const iaProvider = document.getElementById("iaProviderSelect")?.value || "hf"; // Default: Hugging Face
     const endpoint = iaProvider === "openai"
@@ -841,74 +880,3 @@ function generarMensajeIA(mood) {
         }
     });
 }
-
-//     !!!! CÓDIGO A DESCOMENTAR EN CASO DE NO DISPONER DE UNA CLAVE API ¡¡¡¡
-// Esto genera automáticamente un mensaje IA al seleccionar el estado de ánimo
-/* function generarMensajeIA(mood) {
-    console.log(`Estado de ánimo recibido: ${mood}`);
-
-    let simulatedMessage = "";
-    switch (mood) {
-        case "feliz":
-            simulatedMessage = "¡Qué bueno verte feliz! 😊";
-            break;
-        case "triste":
-            simulatedMessage = "Venga, todo mejorará 😌";
-            break;
-        case "ansioso":
-            simulatedMessage = "Respira profundo, todo va a estar bien 🌿";
-            break;
-        case "relajado":
-            simulatedMessage = "Qué bueno que te sientas relajado 🌊";
-            break;
-        default:
-            simulatedMessage = "¡No te preocupes, todo está bien! 😄";
-    }
-
-    // Guarda en localStorage
-    localStorage.setItem('iaMessage', simulatedMessage);
-
-    // Además lo añade al chat adaptativo
-    addMessage("ia", simulatedMessage);
-} */
-
-
-//     !!!! CÓDIGO A COMENTAR EN CASO DE NO DISPONER DE UNA CLAVE API ¡¡¡¡
-// Modificar la función de IA para guardar el mensaje sin mostrarlo en la interfaz
-// function generarMensajeIA(mood) {
-//     fetch('http://localhost:3000/api/mood-response', {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ mood })
-//     })
-//     .then(res => res.json())
-//     .then(data => {
-//       localStorage.setItem('iaMessage', data.message);
-  
-//       // Mostrar en el chat adaptativo
-//       addMessage("ia", data.message);
-  
-//       // Mostrar también en el mensaje grande animado
-//       const mensajeElemento = document.getElementById('mensajeIATexto');
-//       const mensajeContenedor = document.getElementById('mensajeIA');
-//       mensajeElemento.innerHTML = data.message;
-//       mensajeContenedor.classList.add('visible');
-//     })
-//     .catch(err => {
-//       console.error("Error al generar mensaje:", err);
-//       const errorMessage = "No he podido generar un mensaje ahora mismo 😕";
-//       localStorage.setItem('iaMessage', errorMessage);
-      
-//       // Mostrar en el chat
-//       addMessage("ia", errorMessage);
-  
-//       // Mostrar en el mensaje grande animado
-//       const mensajeElemento = document.getElementById('mensajeIATexto');
-//       const mensajeContenedor = document.getElementById('mensajeIA');
-//       mensajeElemento.innerHTML = errorMessage;
-//       mensajeContenedor.classList.add('visible');
-//     });
-//   }
-
-
-  

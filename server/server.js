@@ -2,7 +2,6 @@
 
 const express = require("express");
 const cors = require("cors");
-//const fetch = require("node-fetch");
 require("dotenv").config();
 
 const app = express();
@@ -24,7 +23,7 @@ app.use(express.static("public"));
 app.use(express.json());
 
 
-// 🔹 Fallback local para mensajes por mood. En el caso de no disponer de IA 
+// Fallback local para mensajes por mood. En el caso de no disponer de IA 
 const fallbackMensajePorMood = (mood) => {
   const respuestas = {  //(No se utiliza por incorporación de recomendaciones)
     feliz: "¡Qué alegría verte feliz! 😄 Sigue disfrutando tu día.",
@@ -34,6 +33,89 @@ const fallbackMensajePorMood = (mood) => {
   };
   return respuestas[mood] || "No funciona correctamente este proveedor de IA, aun así gracias por compartir cómo te sientes. Estoy aquí para ti. 🤍";
 };
+
+// Endpoint IA adaptado a OpenAI
+const { OpenAI } = require("openai");
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+app.post("/api/chat-openai", async (req, res) => {
+  const { historial, mensajeUsuario, mood } = req.body;
+  console.log(`🧠 OpenAI - Mood recibido: ${mood}`);
+
+  if (!mensajeUsuario || typeof mensajeUsuario !== "string") {
+    return res.status(400).json({ error: "Mensaje inválido del usuario" });
+  }
+
+  try {
+    if (!process.env.OPENAI_API_KEY) throw new Error("Falta API Key");
+
+    let mensajesContexto = [
+      {
+        role: "system",
+        content: `Eres una IA empática y amable. Responde en español, de forma cercana, natural y breve. Estás hablando con alguien que se siente '${mood}'. Adapta tu tono a su estado de ánimo.`
+      }
+    ];
+
+    if (Array.isArray(historial)) {
+      const historialRecortado = historial.slice(-10);
+      historialRecortado.forEach(m => {
+        mensajesContexto.push({
+          role: m.sender === "usuario" ? "user" : "assistant",
+          content: m.texto
+        });
+      });
+    }
+
+    mensajesContexto.push({ role: "user", content: mensajeUsuario });
+
+    const totalPalabras = mensajesContexto.reduce((acc, msg) => acc + msg.content.split(" ").length, 0);
+    const limitePalabras = 1200;
+
+    if (totalPalabras > limitePalabras) {
+      const resumenPrompt = mensajesContexto
+        .filter(m => m.role !== "system")
+        .map(m => `${m.role === "user" ? "Usuario" : "IA"}: ${m.content}`)
+        .join("\n");
+
+      const resumenRespuesta = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+          { role: "system", content: "Resume brevemente esta conversación en español, manteniendo el contexto emocional." },
+          { role: "user", content: resumenPrompt }
+        ],
+        max_tokens: 150,
+        temperature: 0.5
+      });
+
+      const resumen = resumenRespuesta.choices[0].message.content.trim();
+
+      mensajesContexto = [
+        {
+          role: "system",
+          content: `Eres una IA empática. Estás continuando una conversación que hasta ahora ha sido esta: \"${resumen}\"`
+        },
+        {
+          role: "user",
+          content: mensajeUsuario
+        }
+      ];
+    }
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: mensajesContexto,
+      max_tokens: 120,
+      temperature: 0.8
+    });
+
+    const respuesta = completion.choices[0].message.content.trim();
+    res.json({ mensaje: respuesta });
+
+  } catch (err) {
+    console.warn("⚠️ Error en /api/chat-openai:", err.message);
+    res.status(500).json({ mensaje: fallbackMensajePorMood(mood) });
+  }
+});
 
 // Endpoint IA adaptado a Hugging Face
 app.post("/api/mood-response-hf", async (req, res) => {
@@ -73,36 +155,6 @@ app.post("/api/mood-response-hf", async (req, res) => {
 
   } catch (err) {
     console.warn("⚠️ Error con Hugging Face:", err.message);
-    res.json({ mensaje: fallbackMensajePorMood(mood) });
-  }
-});
-
-// Endpoint IA adaptado a OpenAI
-const { OpenAI } = require("openai");
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-app.post("/api/mood-response-openai", async (req, res) => {
-  const { mood } = req.body;
-  console.log(`🧠 OpenAI - Mood recibido: ${mood}`);
-
-  try {
-    if (!process.env.OPENAI_API_KEY) throw new Error("Falta API Key");
-
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: "Eres un asistente empático que responde en español con frases breves, simpáticas y con tono cercano." },
-        { role: "user", content: `Una persona se siente ${mood}. Dale una respuesta simpática, en español, con una sugerencia útil si es posible.` }
-      ],
-      max_tokens: 60,     // Máximo de palabras, para que no se dispare el coste
-      temperature: 0.8   // Creatividad moderada (0.7–0.9 es ideal para empatía)
-    });
-
-    const mensaje = completion.choices[0].message.content.trim();
-    res.json({ mensaje });
-
-  } catch (err) {
-    console.warn("⚠️ Error con OpenAI:", err.message);
     res.json({ mensaje: fallbackMensajePorMood(mood) });
   }
 });
