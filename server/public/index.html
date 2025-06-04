@@ -10,6 +10,24 @@
     <link rel="icon" href="emoji.png" type="image/png">
 </head>
 <body>
+    <!-- Capa de bloqueo -->
+    <div id="ui-blocker" class="ui-blocker hidden"></div>
+
+    <!-- Privacidad y consentimiento de uso -->
+    <div id="privacy-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>🔒 Protección de datos y consentimiento informado 🔒</h2>
+            <p> Este Mood Tracker respeta tu privacidad. No se recopilan datos personales y tu información se mantiene en tu dispositivo.
+            Consulta la <a href="privacy.html" target="_blank">política de privacidad</a> para más detalles.
+            </p>
+            <label>
+                <input type="checkbox" id="accept-checkbox" />
+                He leído y acepto la política de privacidad.
+                </label>
+            <button id="accept-button" disabled>Aceptar</button>
+        </div>
+    </div>
+      
     <header>
         <h1>Mood Tracker</h1>
         <p class="subtitle">Descubre tu estado de ánimo y mejora tu bienestar</p>
@@ -54,9 +72,9 @@
 
                 <!-- Mensajes de advertencia -->
                 <div class="warnings">
-                    <p id="warning" class="ocultar">¡Vamos, selecciona un estado! 😅</p>
-                    <p id="warning2" class="ocultar">Es por tu bien, ¿acaso no quieres una interfaz <br> de usuario personalizada a tu estado de ánimo? 😁</p>
-                    <p id="warning3" class="ocultar">Como quieras aburrido, te dejo este por defecto 😛</p>
+                    <p id="warning" class="hidden">¡Vamos, selecciona un estado! 😅</p>
+                    <p id="warning2" class="hidden">Es por tu bien, ¿acaso no quieres una interfaz <br> de usuario personalizada a tu estado de ánimo? 😁</p>
+                    <p id="warning3" class="hidden">Como quieras aburrido, te dejo este por defecto 😛</p>
                 </div>
             </form>
         </div>

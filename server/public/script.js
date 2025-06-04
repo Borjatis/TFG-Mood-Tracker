@@ -1,6 +1,33 @@
 let attempts = 0; // Contador para realizar el seguimiento de los intentos
 let mood = null; // Estado de ánimo
 
+// Logica para la capa de bloqueo
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('privacy-modal');
+    const checkbox = document.getElementById('accept-checkbox');
+    const button = document.getElementById('accept-button');
+    const blocker = document.getElementById('ui-blocker');
+
+    const oneDay = 24 * 60 * 60 * 1000;
+    const lastAccepted = localStorage.getItem('privacyAcceptedAt');
+    const now = Date.now();
+
+    if (!lastAccepted || now - parseInt(lastAccepted) > oneDay) {
+        modal.classList.remove('hidden');
+        blocker.classList.remove('hidden');
+
+        checkbox.addEventListener('change', () => {
+        button.disabled = !checkbox.checked;
+        });
+
+        button.addEventListener('click', () => {
+        localStorage.setItem('privacyAcceptedAt', Date.now());
+        modal.classList.add('hidden');
+        blocker.classList.add('hidden');
+        });
+    }
+});
+  
 // Audiciones para cada estado de ánimo
 const happySound = new Audio('sounds/happy.mp3');
 const sadSound = new Audio('sounds/sad.mp3');
