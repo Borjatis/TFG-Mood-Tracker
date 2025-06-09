@@ -452,5 +452,129 @@ canvas {
   z-index: -1; /* Para que quede detrás del contenido */
 }
 
+/*  RESPONSIVE DESIGN: Para dispositivos móviles */
+
+@media (max-width: 768px) {
+  * {
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  header {
+    flex-direction: column;
+    height: auto;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  header .subtitle {
+    padding-left: 0;
+    max-width: 90%;
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  #mood-comment {
+    font-size: 0.95rem;
+  }
+
+  .hero {
+    padding: 2rem 1rem;
+  }
+
+  .columns {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  #mood-form {
+    width: 90%;
+    margin-inline: auto;
+  }
+
+  .block {
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .first-block,
+  .ia-message-container {
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    margin: 0 auto;
+  }
+
+  .config-container,
+  .history-container {
+    max-width: 100%;
+    margin: 0 auto 20px auto;
+  }
+
+  .chart-container {
+    padding: 10px;
+  }
+
+  #volume-slider {
+    width: 100%;
+  }
+
+  .chat-container {
+    font-size: 1rem;
+  }
+
+  #chat-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  
+  #user-input {
+    width: 100%;
+    flex: 1 1 100%;
+    font-size: 0.95rem;
+  }
+  
+  #send-button,
+  #voice-button {
+    flex: 0 0 auto;
+    padding: 8px 16px;
+    font-size: 1rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.8rem;
+  }
+
+  .modal-content {
+    padding: 1.5rem;
+  }
+
+  .hero-text h2 {
+    font-size: 1rem;
+  }
+
+  .hero-text p {
+    font-size: 0.9rem;
+  }
+
+  select, button {
+    font-size: 1rem;
+  }
+
+  .warnings p {
+    font-size: 1rem;
+  }
+
+  .voice-note {
+    font-size: 0.75rem;
+  }
+}
 
   
