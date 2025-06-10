@@ -1,6 +1,14 @@
 let attempts = 0; // Contador para realizar el seguimiento de los intentos
 let mood = null; // Estado de ánimo
 
+//Función para saber que se ha aceptado la Politica de Privacidad
+function privacidadAceptada() {
+    const lastAccepted = localStorage.getItem('privacyAcceptedAt');
+    const oneDay = 24 * 60 * 60 * 1000;
+    const now = Date.now();
+    return lastAccepted && now - parseInt(lastAccepted) <= oneDay;
+}
+
 // Logica para la capa de bloqueo
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('privacy-modal');
@@ -540,6 +548,8 @@ voiceButton.disabled = true;
 
 // Mostrar mensaje inicial una vez al día
 document.addEventListener("DOMContentLoaded", () => {
+    if (!privacidadAceptada()) return;
+    
     const lastShownDate = localStorage.getItem("lastMoodPromptDate");
     const today = new Date().toLocaleDateString("es-ES");
 
@@ -689,6 +699,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Añadir mensajes al contenedor de chat
 function addMessage(sender, text) {
+    if (sender === "ia" && !privacidadAceptada()) return;
+
     const message = document.createElement('div');
     message.classList.add('chat-message', sender);
     message.textContent = text;
